@@ -22,10 +22,10 @@ Create the following file:
 
 ...and config your api_login_id and api_key:
 
-Spree::AppConfiguration.class_eval do
-  preference :preferred_tax_cloud_api_login_id, :string, :default => 'Your_Login' 
-  preference :preferred_tax_cloud_api_key, :string, :default => 'Your_API_Key'  
-end
+   Spree::AppConfiguration.class_eval do
+     preference :preferred_tax_cloud_api_login_id, :string, :default => 'Your_Login' 
+     preference :preferred_tax_cloud_api_key, :string, :default => 'Your_API_Key'  
+   end
 
 
 
