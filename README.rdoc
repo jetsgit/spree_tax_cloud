@@ -1,0 +1,25 @@
+==  Spree TaxCloud API
+
+
+Based on the work of Chris Mar and Drew Tempelmeyer.
+USA Tax calculation extension for Spree using Tax Cloud service .
+
+
+===USAGE
+
+Run below to install migrations:
+
+
+rake spree_tax_cloud:install:migrations
+
+...then
+
+rake db:migrate
+
+
+===COPYRIGHT
+
+
+Spree Tax Cloud Copyright (c) by Jerrold R Thompson (@whidbey) released under the 'new' BSD license.
+
+
