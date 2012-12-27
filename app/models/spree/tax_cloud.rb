@@ -95,9 +95,9 @@ module Spree
        
       def default_body
 
-	 # { 'apiLoginID' => Spree::Config.preferred_tax_cloud_api_login_id,
+	 { 'apiLoginID' => Spree::Config.preferred_tax_cloud_api_login_id,
 
-	 # 'apiKey' => Spree::Config.preferred_tax_cloud_api_key }
+	 'apiKey' => Spree::Config.preferred_tax_cloud_api_key }
 	 
 
       end
