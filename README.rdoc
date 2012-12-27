@@ -1,8 +1,8 @@
-==  Spree TaxCloud API
+==  Spree TaxCloud SOAP API 
 
+USA Tax calculation extension for Spree using Tax Cloud service .
 
 Based on the work of Chris Mar and Drew Tempelmeyer.
-USA Tax calculation extension for Spree using Tax Cloud service .
 
 
 ===USAGE
@@ -10,11 +10,23 @@ USA Tax calculation extension for Spree using Tax Cloud service .
 Run below to install migrations:
 
 
-rake spree_tax_cloud:install:migrations
+    bundle exec rake spree_tax_cloud:install:migrations
 
 ...then
 
-rake db:migrate
+    bundle exec rake db:migrate
+
+Create the following file:
+
+    app/models/spree/app_configuration_decorator.rb 
+
+...and config your api_login_id and api_key:
+
+Spree::AppConfiguration.class_eval do
+  preference :preferred_tax_cloud_api_login_id, :string, :default => 'Your_Login' 
+  preference :preferred_tax_cloud_api_key, :string, :default => 'Your_API_Key'  
+end
+
 
 
 ===COPYRIGHT
