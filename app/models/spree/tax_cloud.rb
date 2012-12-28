@@ -131,7 +131,7 @@ module Spree
 
 	 'State' =>  address.state_text,
 
-	 'Zip5' => address.zipcode ,
+	 'Zip5' => address.zipcode[0..4] ,
 
 	 'Zip4' =>  nil  }
 

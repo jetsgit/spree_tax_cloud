@@ -56,7 +56,12 @@ Set the product :tic to the product you are selling in app/models/spree/tax_clou
 
 		:tic => '00000', 
 
-Note: at this time spree_tax_cloud does not handle multiple product tic's
+Note: at this time spree_tax_cloud does not handle multiple tax category tic's
+
+
+In order to use this extension, you must fork it due to the setting of 
+parameters in the extension. The alternative would be to create decorators
+for the 2 above files.
 
 
 
