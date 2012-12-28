@@ -7,6 +7,13 @@ Based on the work of Chris Mar and Drew Tempelmeyer.
 
 ===USAGE
 
+Create an account with TaxCloud:
+
+	https://taxcloud.net
+
+...and get an api_login_id and api_key.
+
+
 Run below to install migrations:
 
 
@@ -26,6 +33,30 @@ Create the following file:
      preference :preferred_tax_cloud_api_login_id, :string, :default => 'Your_Login' 
      preference :preferred_tax_cloud_api_key, :string, :default => 'Your_API_Key'  
    end
+
+Set the 'origin' in app/models/spree/tax_cloud.rb to be that of your business:
+
+
+
+  'origin' => { 'Address1' =>  "Your_Street" ,
+
+		'Address2' =>  nil ,
+
+		'City' =>  "Your_City",
+
+		'State' =>  "Your_State",
+
+		'Zip5' =>  "Your_Zip" ,
+
+		'Zip4' =>  nil  }, 
+
+
+Set the product :tic to the product you are selling in app/models/spree/tax_cloud/tax_cloud_transaction:
+
+
+		:tic => '00000', 
+
+Note: at this time spree_tax_cloud does not handle multiple product tic's
 
 
 

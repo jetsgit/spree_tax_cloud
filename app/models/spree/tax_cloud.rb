@@ -30,8 +30,6 @@ module Spree
 
                               'cartItems' => {'CartItem' => tax_cloud_transaction.cart_items.map(&:to_hash)},
 
-                              # 'origin' => Spree::Config.preferred_tax_cloud_origin,
-
                               
                              'origin' => { 'Address1' =>  "P.O. Box 944" ,
 
@@ -44,6 +42,7 @@ module Spree
                                            'Zip5' =>  "98260" ,
 
                                            'Zip4' =>  nil  }, 
+
                              'destination' => destination_address(order.ship_address)
                     
                            })
