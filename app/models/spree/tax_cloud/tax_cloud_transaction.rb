@@ -66,9 +66,9 @@ module Spree
 
 	    end
 
-	 rescue => ex
+	 # rescue => ex
 
-	    Exceptional.handle ex
+	 #    Exceptional.handle ex
 
 	 end
 
@@ -80,9 +80,9 @@ module Spree
 
 	    tax_cloud.capture(self)
 
-	 rescue => ex
+	 # rescue => ex
 
-	    Exceptional.handle ex
+	 #    Exceptional.handle ex
 
 	 end
 
