@@ -31,17 +31,7 @@ module Spree
                               'cartItems' => {'CartItem' => tax_cloud_transaction.cart_items.map(&:to_hash)},
 
                               
-                             'origin' => { 'Address1' =>  "P.O. Box 944" ,
-
-                                           'Address2' =>  nil ,
-
-                                           'City' =>  "Langley",
-
-                                           'State' =>  "Wa",
-
-                                           'Zip5' =>  "98260" ,
-
-                                           'Zip4' =>  nil  }, 
+                             'origin' => JSON.parse(Spree::Config.preferred_tax_cloud_origin), 
 
                              'destination' => destination_address(order.ship_address)
                     
