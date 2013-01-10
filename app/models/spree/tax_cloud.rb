@@ -22,8 +22,6 @@ module Spree
 
       def lookup_params(tax_cloud_transaction)
 
-	 begin
-	    
 	 order = tax_cloud_transaction.order
 
 	 default_body.merge({ 'customerID' => order.user_id || order.number,
@@ -33,26 +31,11 @@ module Spree
                               'cartItems' => {'CartItem' => tax_cloud_transaction.cart_items.map(&:to_hash)},
 
                               
-                             # 'origin' => JSON.parse(Spree::Config.preferred_tax_cloud_origin), 
-			      'origin' => { 'Address1' =>  "P.O. Box 944" ,
+                             'origin' => JSON.parse(Spree::Config.preferred_tax_cloud_origin), 
 
-                                                               'Address2' =>  nil ,
-
-                                                               'City' =>  "Langley",
-
-                                                               'State' =>  "Wa",
-
-                                                               'Zip5' =>  "98260" ,
-
-                                                               'Zip4' =>  nil  }, 
-	 }
                              'destination' => destination_address(order.ship_address)
                     
                            })
-	 rescue => ex
-
-	    Exceptional.handle ex
-	 end
 
       end
 
