@@ -112,7 +112,7 @@ module Spree
 
 	       :index => (index += 1),
 
-	       :tic => , '20020',  #TODO    Spree::Config.preferred_tax_cloud_product_tic 
+	       :tic => '20020',  #TODO    Spree::Config.preferred_tax_cloud_product_tic 
 
 	       :sku => line_item.variant.sku.presence || line_item.variant.id,
 
