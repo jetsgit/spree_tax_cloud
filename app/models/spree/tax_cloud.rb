@@ -131,7 +131,7 @@ module Spree
 	 { 'Address1 ' => address[:address1],
 	   'Address2' =>  address[:address2],
 	   'City' => address[:city],
-	   'State' => state_text,
+	   'State' => address[:state_text],
 	   'Zip5' => address[:zip5],
 	   'Zip4' => nil }
       end
