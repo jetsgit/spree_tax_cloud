@@ -30,7 +30,7 @@ module Spree
 
                               'cartItems' => {'CartItem' => tax_cloud_transaction.cart_items.map(&:to_hash)},
 
-                             'origin' => origin_address( address = Spree::Config.preferred_tax_cloud_origin ), 
+                             'origin' => origin_address( Spree::Config.preferred_tax_cloud_origin ), 
 
                              'destination' => destination_address(order.ship_address)
                     
