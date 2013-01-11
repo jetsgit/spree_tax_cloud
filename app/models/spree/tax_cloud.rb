@@ -128,7 +128,7 @@ module Spree
 
       def origin_address(address)
 
-	 { 'Address1 ' => address[:address1],
+	 { 'Address1' => address[:address1],
 	   'Address2' =>  address[:address2],
 	   'City' => address[:city],
 	   'State' => address[:state_text],
