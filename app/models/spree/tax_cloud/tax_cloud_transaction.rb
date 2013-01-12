@@ -2,7 +2,7 @@
 
 # on an order
 
-require 'exceptional'
+# require 'exceptional'
 require 'spree/tax_cloud'
 require 'spree/tax_cloud/tax_cloud_cart_item'
 require_dependency 'spree/order'
@@ -68,9 +68,9 @@ module Spree
 
 	    end
 
-	 rescue => ex
+	 # rescue => ex
 
-	    Exceptional.handle ex
+	 #    Exceptional.handle ex
 
 	 end
 
@@ -82,9 +82,9 @@ module Spree
 
 	    tax_cloud.capture(self)
 
-	 rescue => ex
+	 # rescue => ex
 
-	    Exceptional.handle ex
+	 #    Exceptional.handle ex
 
 	 end
 
