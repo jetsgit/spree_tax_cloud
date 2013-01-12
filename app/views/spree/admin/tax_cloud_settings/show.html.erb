@@ -1,0 +1,44 @@
+<%= render :partial => 'spree/admin/shared/configuration_menu' %>
+<% origin = JSON.parse( Spree::Config[:taxcloud_origin] )  %>
+
+<h1><%= t('taxcloud_settings') %></h1>
+
+<table>
+  <tr>
+    <th scope="row"><%= t("taxcloud_api_login_id") %>:</th>
+    <td><%= Spree::Config[:taxcloud_api_login_id] %></td>
+  </tr>
+  <tr>
+    <th scope="row"><%= t("taxcloud_api_key") %>:</th>
+    <td><%= Spree::Config[:taxcloud_api_key] %></td>
+  </tr>
+  <tr>
+    <th scope="row"><%= t("business_address") %>:</th> 
+  </tr>
+  <tr>
+     <td><%= t("address1") %>: <%= origin["Address1"]  %> </td>
+  </tr>
+  <tr>
+    <td><%= t("address2") %>: <%= origin["Address2"]  %></td>
+  </tr>
+  <tr>
+  	<td><%= t("city") %>: <%= origin["City"]  %></td>
+  </tr>
+  <tr>
+    <td><%= t("state") %>: <%= origin["State"]  %></td>
+  </tr>
+  <tr>
+  	<td><%= t("zip_code") %>: <%= origin["Zip5"]  %></td>
+  </tr>
+  <tr>
+    <th scope="row"><%= t("tax_cloud_product_taxibility_code") %>:</th>
+    <td><%= Spree::Config[:taxcloud_product_tic] %></td>
+  </tr>
+  <tr>
+    <th scope="row"><%= t("taxcloud_shipping_taxiblity_code") %>:</th>
+    <td><%= Spree::Config[:taxcloud_shipping_tic] %></td>
+  </tr>
+</table>
+
+<p><%= link_to_with_icon 'edit', t("edit"), edit_admin_mail_chimp_settings_path %></p>
+
