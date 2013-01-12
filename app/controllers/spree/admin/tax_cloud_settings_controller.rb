@@ -20,7 +20,7 @@ module Spree
 
       respond_to do |format|
 	format.html {
-	  redirect_to admin_mail_chimp_settings_path
+	  redirect_to admin_tax_cloud_settings_path
 	}
       end
     end
