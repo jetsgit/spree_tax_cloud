@@ -14,7 +14,7 @@ module SPREE
     # Verify the address via TaxCloud
     def verify
       request_params = {
-        'apiLoginId' => TaxCloud.configuration.api_login_id,
+        'apiLoginID' => TaxCloud.configuration.api_login_id,
         'apiKey' => TaxCloud.configuration.api_key,
         'uspsUserID' => TaxCloud.configuration.usps_username
       }.merge(to_hash.downcase_keys!)

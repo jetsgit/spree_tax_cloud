@@ -118,7 +118,7 @@ module Spree
 
 	 'City' =>  address.city ,
 
-	 'State' =>  address.state_text,
+	 'State' =>  address.state.abbr,
 
 	 'Zip5' => address.zipcode[0..4] ,
 
@@ -131,7 +131,7 @@ module Spree
 	 { 'Address1' => address[:address1],
 	   'Address2' =>  address[:address2],
 	   'City' => address[:city],
-	   'State' => address[:state_text],
+	   'State' => address[:state],
 	   'Zip5' => address[:zip5],
 	   'Zip4' => nil }
       end
