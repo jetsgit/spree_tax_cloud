@@ -7,17 +7,17 @@ module Spree
 
     def update
       origin = params[:address]
-      taxcloud = params[:preferences]
-      Spree::Config.set(:taxcloud_origin => {:Address1 =>  origin[:taxcloud_address1],
+      taxpref = params[:settings]
+      Spree.config { :taxcloud_origin => {:Address1 =>  origin[:taxcloud_address1],
 					    :Address2 => origin[:taxcloud_address2],
 					    :City => origin[:taxcloud_city],
 					    :State => origin[:taxcloud_state],
-					    :Zip5 => origin[:taxcloud_zip5] }.to_json  )
+					    :Zip5 => origin[:taxcloud_zip5] }.to_json }  
 
-      Spree::Config.set(:taxcloud_api_login_id => taxcloud[:taxcloud_api_login_id])
-      Spree::Config.set(:taxcloud_api_key => taxcloud[:taxcloud_api_key])
-      Spree::Config.set(:taxcloud_product_tic => taxcloud[:taxcloud_product_tic])
-      Spree::Config.set(:taxcloud_shipping_tic => taxcloud[:taxcloud_shipping_tic])
+      Spree.config { :taxcloud_api_login_id => taxpref[:taxcloud_api_login_id] }
+      Spree.config { :taxcloud_api_key => taxpref[:taxcloud_api_key] }
+      Spree.config { :taxcloud_product_tic => taxpref[:taxcloud_product_tic] }
+      Spree.config { :taxcloud_shipping_tic => taxpref[:taxcloud_shipping_tic] }
 
       # Spree::Config.set(params[:preferences])
 
@@ -30,4 +30,3 @@ module Spree
     end
   end
 end
-
