@@ -1,5 +1,5 @@
 Spree::Core::Engine.routes.draw do
   namespace :admin do
-    resource :mail_chimp_settings
+    resource :tax_cloud_settings
   end
 end
