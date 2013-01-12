@@ -13,6 +13,15 @@
     <td><%= Spree::Config.taxcloud_api_key %></td>
   </tr>
   <tr>
+    <th scope="row"><%= t("tax_cloud_product_taxability_code") %>:</th>
+    <td><%= Spree::Config.taxcloud_product_tic %></td>
+  </tr>
+  <tr>
+    <th scope="row"><%= t("taxcloud_shipping_taxablity_code") %>:</th>
+    <td><%= Spree::Config.taxcloud_shipping_tic %></td>
+  </tr>
+
+  <tr>
     <th scope="row"><%= t("business_address") %>:</th> 
   </tr>
   <tr>
@@ -30,15 +39,7 @@
   <tr>
   	<td><%= t("zip_code") %>: <%= origin["Zip5"]  %></td>
   </tr>
-  <tr>
-    <th scope="row"><%= t("tax_cloud_product_taxability_code") %>:</th>
-    <td><%= Spree::Config.taxcloud_product_tic %></td>
-  </tr>
-  <tr>
-    <th scope="row"><%= t("taxcloud_shipping_taxablity_code") %>:</th>
-    <td><%= Spree::Config.taxcloud_shipping_tic %></td>
-  </tr>
-</table>
+  </table>
 
 <p><%= link_to_with_icon 'edit', t("edit"), edit_admin_tax_cloud_settings_path %></p>
 
