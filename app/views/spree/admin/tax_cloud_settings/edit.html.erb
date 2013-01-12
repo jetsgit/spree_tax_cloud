@@ -10,11 +10,11 @@
         <legend><%= t('taxcloud_api_login_and_key') %></legend>
         <p>
           <label><%= t('tax_cloud_api_login_id') %></label><br />
-          <%= text_field_tag('settings[taxcloud_api_login_id]', Spree::Config[:taxcloud_api_login_id], :size => 46, :maxlength => 256, :class => 'tax_cloud') %>
+          <%= text_field_tag('settings[taxcloud_api_login_id]', Spree::Config.taxcloud_api_login_id, :size => 46, :maxlength => 256, :class => 'tax_cloud') %>
         </p>
         <p>
           <label><%= t('taxcloud_api_key') %></label><br />
-          <%= text_field_tag('settings[taxcloud_api_key]', Spree::Config[:taxcloud_api_key], :maxlength => 256, :class => 'tax_cloud') %>
+          <%= text_field_tag('settings[taxcloud_api_key]', Spree::Config.taxcloud_api_key, :maxlength => 256, :class => 'tax_cloud') %>
         </p>
       </fieldset>
 
@@ -44,14 +44,14 @@
       </fieldset>
 
       <fieldset>
-        <legend><%= t('taxcloud_taxibility_codes') %></legend>
+        <legend><%= t('taxcloud_taxability_codes') %></legend>
         <p>
-          <label><%= t('tax_cloud_product_taxibility_code') %></label><br />
-          <%= text_field_tag('settings[taxcloud_product_tic]', Spree::Config[:taxcloud_product_tic], :size => 46, :maxlength => 256, :class => 'tax_cloud') %>
+          <label><%= t('tax_cloud_product_taxability_code') %></label><br />
+          <%= text_field_tag('settings[taxcloud_product_tic]', Spree::Config.taxcloud_product_tic, :size => 46, :maxlength => 256, :class => 'tax_cloud') %>
         </p>
         <p>
           <label><%= t('taxcloud_shipping_taxiblity_code') %></label><br />
-          <%= text_field_tag('settings[taxcloud_api_key]', Spree::Config[:taxcloud_shipping_tic], :maxlength => 256, :class => 'tax_cloud') %>
+          <%= text_field_tag('settings[taxcloud_api_key]', Spree::Config.taxcloud_shipping_tic, :maxlength => 256, :class => 'tax_cloud') %>
         </p>
       </fieldset>
 

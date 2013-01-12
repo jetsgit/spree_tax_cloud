@@ -6,11 +6,11 @@
 <table>
   <tr>
     <th scope="row"><%= t("taxcloud_api_login_id") %>:</th>
-    <td><%= Spree::Config[:taxcloud_api_login_id] %></td>
+    <td><%= Spree::Config.taxcloud_api_login_id %></td>
   </tr>
   <tr>
     <th scope="row"><%= t("taxcloud_api_key") %>:</th>
-    <td><%= Spree::Config[:taxcloud_api_key] %></td>
+    <td><%= Spree::Config.taxcloud_api_key %></td>
   </tr>
   <tr>
     <th scope="row"><%= t("business_address") %>:</th> 
@@ -31,12 +31,12 @@
   	<td><%= t("zip_code") %>: <%= origin["Zip5"]  %></td>
   </tr>
   <tr>
-    <th scope="row"><%= t("tax_cloud_product_taxibility_code") %>:</th>
-    <td><%= Spree::Config[:taxcloud_product_tic] %></td>
+    <th scope="row"><%= t("tax_cloud_product_taxability_code") %>:</th>
+    <td><%= Spree::Config.taxcloud_product_tic %></td>
   </tr>
   <tr>
-    <th scope="row"><%= t("taxcloud_shipping_taxiblity_code") %>:</th>
-    <td><%= Spree::Config[:taxcloud_shipping_tic] %></td>
+    <th scope="row"><%= t("taxcloud_shipping_taxablity_code") %>:</th>
+    <td><%= Spree::Config.taxcloud_shipping_tic %></td>
   </tr>
 </table>
 
