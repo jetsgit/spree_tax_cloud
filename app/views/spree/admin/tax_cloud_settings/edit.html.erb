@@ -22,23 +22,23 @@
         <legend><%= t('business_address') %></legend>
         <p>
           <label><%= t('address_1') %></label><br />
-	  <%= text_field_tag('preferences[taxcloud_address1]', origin["Address1"], :size => 46, :maxlength => 256, :class => 'tax_cloud') %>
+	  <%= text_field_tag('address[taxcloud_address1]', origin["Address1"], :size => 46, :maxlength => 256, :class => 'tax_cloud') %>
         </p>
         <p>
           <label><%= t('address_2') %></label><br />
-	  <%= text_field_tag('preferences[taxcloud_address2]', origin["Address2"], :size => 46, :maxlength => 256, :class => 'tax_cloud') %>
+	  <%= text_field_tag('address[taxcloud_address2]', origin["Address2"], :size => 46, :maxlength => 256, :class => 'tax_cloud') %>
         </p>
         <p>
           <label><%= t('city') %></label><br />
-	  <%= text_field_tag('preferences[taxcloud_city]', origin["City"], :size => 46, :maxlength => 256, :class => 'tax_cloud') %>
+	  <%= text_field_tag('address[taxcloud_city]', origin["City"], :size => 46, :maxlength => 256, :class => 'tax_cloud') %>
         </p>
         <p>
           <label><%= t('state') %></label><br />
-	  <%= text_field_tag('preferences[taxcloud_state]', origin["State"], :size => 46, :maxlength => 256, :class => 'tax_cloud') %>
+	  <%= text_field_tag('address[taxcloud_state]', origin["State"], :size => 46, :maxlength => 256, :class => 'tax_cloud') %>
         </p>
         <p>
           <label><%= t('zip5') %></label><br />
-	  <%= text_field_tag('preferences[taxcloud_zip5]', origin["Zip5"], :size => 46, :maxlength => 256, :class => 'tax_cloud') %>
+	  <%= text_field_tag('address[taxcloud_zip5]', origin["Zip5"], :size => 46, :maxlength => 256, :class => 'tax_cloud') %>
         </p>
 
       </fieldset>
