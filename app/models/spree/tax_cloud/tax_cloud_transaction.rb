@@ -41,7 +41,7 @@ module Spree
 	 begin
 
 	    create_cart_items
-
+puts "I am at top of tax_cloud_transaction_lookup"
 	    response = tax_cloud.lookup(self)
 
 	    raise 'Tax Cloud Lookup Error' unless response.success?
@@ -74,7 +74,7 @@ module Spree
 	 #    Exceptional.handle ex
 
 	 end
-
+puts "I am at the bottom of tax_cloud_transaction_lookup"
       end
 
       def capture

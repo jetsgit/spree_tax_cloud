@@ -12,17 +12,17 @@ module Spree
 
 
       def lookup(tax_cloud_transaction)
-
+puts "I am at top of lookup"
 	client.request(:lookup) do
 
 	    soap.body = lookup_params(tax_cloud_transaction)
 
 	end
-    
+   puts "I am at bottom of lookup" 
       end
 
       def lookup_params(tax_cloud_transaction)
-
+puts "I am at top of lookup params"
 	 order = tax_cloud_transaction.order
 	 default_body.merge({ 'customerID' => order.user_id || order.number,
 
@@ -45,7 +45,7 @@ module Spree
                                            # 'Zip4' =>  nil  },	
 
                              'destination' => destination_address(order.ship_address)
-                    
+                   puts "I am at bottom of lookup params" 
                            })
 
       end
@@ -94,7 +94,7 @@ module Spree
 
        
       def default_body
-
+puts "I am at top of lookup body"
 	 { 'apiLoginID' => Spree::Config.get( :taxcloud_api_login_id ),
 
 	 'apiKey' => Spree::Config.get( :taxcloud_api_key ) }
@@ -103,13 +103,13 @@ module Spree
 
 	 # 'apiKey' => 'DD7CC8D4-A508-40D7-B22A-A0F7546F81AF' }
 	  
-	 
+	puts "I am at bottom of lookup body" 
 
       end
 
 
       def cart_items(line_items)
-
+puts "I am at top of cart_items"
 	 index = 0
 
 	 line_items.map do |line_item|
@@ -121,14 +121,14 @@ module Spree
 	    'Price' => line_item.price.to_f.to_s,
 
 	    'Qty' => line_item.quantity }}
-
+puts "I am at bottom of cart_items"
 	 end
 
       end
 
 
       def destination_address(address)
-
+puts "I am at top of destination_address"
 	 { 'Address1' =>  address.address1 ,
 
 	 'Address2' =>  address.address2 ,
@@ -140,7 +140,7 @@ module Spree
 	 'Zip5' => address.zipcode[0..4] ,
 
 	 'Zip4' =>  nil  }
-
+puts "I am at bottom of destination_address"
       end
 
       def origin_address(address)
