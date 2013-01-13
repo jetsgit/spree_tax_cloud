@@ -10,7 +10,7 @@ module Spree
 
   class TaxCloudTransaction < ActiveRecord::Base
 
-     include Spree::Config
+     include Spree::AppConfiguration
 
 
       belongs_to :order

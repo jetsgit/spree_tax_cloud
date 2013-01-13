@@ -7,7 +7,7 @@ module Spree
 
     class TaxCloud
 
-       include Spree::Config
+       include Spree::AppConfiguration
 
       # include Spree::Preferences::Preferable
 
