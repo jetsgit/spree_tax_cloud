@@ -7,7 +7,7 @@ module Spree
 
     class TaxCloud
 
-      include Spree::Preferences::Preferable
+      # include Spree::Preferences::Preferable
 
 
       def lookup(tax_cloud_transaction)
@@ -23,14 +23,14 @@ module Spree
       def lookup_params(tax_cloud_transaction)
 
 	 order = tax_cloud_transaction.order
-
+	 debugger
 	 default_body.merge({ 'customerID' => order.user_id || order.number,
 
                               'cartID' => order.number,
 
                               'cartItems' => {'CartItem' => tax_cloud_transaction.cart_items.map(&:to_hash)},
 
-                             'origin' =>   origin_address( JSON.parse( Spree::Config.taxcloud_origin ) )  , 
+                             'origin' =>  JSON.parse( Spree::Config.taxcloud_origin ), 
 
                              'destination' => destination_address(order.ship_address)
                     
