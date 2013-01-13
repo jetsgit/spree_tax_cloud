@@ -4,7 +4,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
 
   s.name        = 'spree_tax_cloud'
-  s.version     = '0.0.95'
+  s.version     = '0.0.96'
   s.authors     = ["Jerrold Thompson"]
   s.email       = 'jet@whidbey.com'
   s.homepage    = 'https://github.com/bluehandtalking/spree_tax_cloud.git'
