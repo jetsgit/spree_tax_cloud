@@ -24,7 +24,6 @@ module Spree
       def lookup_params(tax_cloud_transaction)
 
 	 order = tax_cloud_transaction.order
-	 debugger
 	 default_body.merge({ 'customerID' => order.user_id || order.number,
 
                               'cartID' => order.number,
@@ -119,7 +118,7 @@ module Spree
 
 	 'City' =>  address.city ,
 
-	 'State' =>  address.state.abbr,
+	 'State' =>  address.state_text,
 
 	 'Zip5' => address.zipcode[0..4] ,
 
