@@ -10,7 +10,6 @@ module Spree
 
   class TaxCloudTransaction < ActiveRecord::Base
 
-      include Spree::Preferences::Preferable
 
       belongs_to :order
 
@@ -113,7 +112,7 @@ module Spree
 
 	       :index => (index += 1),
 
-	       :tic => Spree::Config.preferred_taxcloud_product_tic, 
+	       :tic => Spree::Config[ :taxcloud_product_tic ], 
 
 	       :sku => line_item.variant.sku.presence || line_item.variant.id,
 
@@ -131,7 +130,7 @@ module Spree
 
 	    :index => (index += 1),
 
-	    :tic =>  Spree::Config.preferred_taxcloud_shipping_tic,  
+	    :tic =>  Spree::Config[ :preferred_tax_cloud_shipping_tic ],  
 
 	    :sku => 'SHIPPING',
 
