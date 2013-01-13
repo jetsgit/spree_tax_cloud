@@ -113,9 +113,9 @@ module Spree
 
 	       :index => (index += 1),
 
-	       # :tic => Spree::Config.taxcloud_product_tic , 
+	       :tic => Spree::Config.get( :taxcloud_product_tic ) , 
 
-	       :tic => '20020' , 
+	       # :tic => '20020' , 
 	        
 	       :sku => line_item.variant.sku.presence || line_item.variant.id,
 
@@ -133,9 +133,9 @@ module Spree
 
 	    :index => (index += 1),
 
-	    # :tic =>  Spree::Config.taxcloud_shipping_tic,  
+	    :tic =>  Spree::Config.get( :taxcloud_shipping_tic ),  
 
-	    :tic =>  '11010',  
+	    # :tic =>  '11010',  
 	     
 
 	    :sku => 'SHIPPING',
