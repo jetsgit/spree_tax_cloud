@@ -7,7 +7,7 @@ module Spree
 
     class TaxCloud
 
-      # include Spree::Preferences::Preferable
+      include Spree::Preferences::Preferable
 
 
       def lookup(tax_cloud_transaction)
