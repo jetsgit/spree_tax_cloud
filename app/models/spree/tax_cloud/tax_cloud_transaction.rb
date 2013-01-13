@@ -10,9 +10,6 @@ module Spree
 
   class TaxCloudTransaction < ActiveRecord::Base
 
-     include Spree::AppConfiguration
-
-
       belongs_to :order
 
       validates :order, :presence => true

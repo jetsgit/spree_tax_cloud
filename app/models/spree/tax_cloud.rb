@@ -7,7 +7,6 @@ module Spree
 
     class TaxCloud
 
-       include Spree::AppConfiguration
 
       # include Spree::Preferences::Preferable
 
@@ -138,11 +137,6 @@ module Spree
 	   'Zip4' => nil }
       end
 
-      def preference_cache_key(name)
-
-	 [self.class.name, name].join('::').underscore
-
-      end
 
     end
 
