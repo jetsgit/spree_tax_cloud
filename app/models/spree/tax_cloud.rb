@@ -45,8 +45,9 @@ puts "I am at top of lookup params"
                                            # 'Zip4' =>  nil  },	
 
                              'destination' => destination_address(order.ship_address)
-                   puts "I am at bottom of lookup params" 
                            })
+                   puts "I am at bottom of lookup params" 
+			   
 
       end
 
