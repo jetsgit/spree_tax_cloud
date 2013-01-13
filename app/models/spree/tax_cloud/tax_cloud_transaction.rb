@@ -129,7 +129,7 @@ module Spree
 
 	    :index => (index += 1),
 
-	    :tic =>  Spree::Config.tax_cloud_shipping_tic,  
+	    :tic =>  Spree::Config.taxcloud_shipping_tic,  
 
 	    :sku => 'SHIPPING',
 
