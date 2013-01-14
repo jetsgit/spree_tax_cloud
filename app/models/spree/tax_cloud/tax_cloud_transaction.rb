@@ -1,7 +1,6 @@
 # Designed to be the Originator for an Adjustment
 
 # on an order
-
 # require 'exceptional'
 require 'spree/tax_cloud'
 require 'spree/tax_cloud/tax_cloud_cart_item'
@@ -9,8 +8,6 @@ require_dependency 'spree/order'
 module Spree
 
   class TaxCloudTransaction < ActiveRecord::Base
-
-      # include Spree::Preferences::Preferable
 
       belongs_to :order
 
@@ -20,9 +17,7 @@ module Spree
 
       has_many :cart_items, :class_name => 'TaxCloudCartItem', :dependent => :destroy
 
-
       # called when order updates adjustments
-
 
       def update_adjustment(adjustment, source)
 
@@ -41,7 +36,7 @@ module Spree
 	 begin
 
 	    create_cart_items
-puts "I am at top of tax_cloud_transaction_lookup"
+
 	    response = tax_cloud.lookup(self)
 
 	    raise 'Tax Cloud Lookup Error' unless response.success?
@@ -74,7 +69,7 @@ puts "I am at top of tax_cloud_transaction_lookup"
 	 #    Exceptional.handle ex
 
 	 end
-puts "I am at the bottom of tax_cloud_transaction_lookup"
+
       end
 
       def capture
@@ -91,7 +86,6 @@ puts "I am at the bottom of tax_cloud_transaction_lookup"
 
       end
 
-       
       private
 
       def tax_cloud
@@ -100,7 +94,6 @@ puts "I am at the bottom of tax_cloud_transaction_lookup"
 
       end
 
-       
       def create_cart_items
 
 	 cart_items.clear
@@ -115,8 +108,6 @@ puts "I am at the bottom of tax_cloud_transaction_lookup"
 
 	       :tic => Spree::Config.get( :taxcloud_product_tic ) , 
 
-	       # :tic => '20020' , 
-	        
 	       :sku => line_item.variant.sku.presence || line_item.variant.id,
 
 	       :quantity => line_item.quantity,
@@ -134,9 +125,6 @@ puts "I am at the bottom of tax_cloud_transaction_lookup"
 	    :index => (index += 1),
 
 	    :tic =>  Spree::Config.get( :taxcloud_shipping_tic ),  
-
-	    # :tic =>  '11010',  
-	     
 
 	    :sku => 'SHIPPING',
 
