@@ -17,37 +17,17 @@ Create an account with TaxCloud:
 Run below to install migrations:
 
 
-    bundle exec rake spree_tax_cloud:install:migrations
+    bundle exec rails g spree_tax_cloud:install 
 
-...then
+At this time, you must manually copy the ca-bundle.crt 
+to your application's lib directory.
 
-    bundle exec rake db:migrate
+===Configure in Spree Admin
 
-Create the following file:
-
-    app/models/spree/app_configuration_decorator.rb 
-
-...and config your api_login_id and api_key:
-
-   Spree::AppConfiguration.class_eval do
-     preference :preferred_tax_cloud_api_login_id, :string, :default => 'Your_Login' 
-     preference :preferred_tax_cloud_api_key, :string, :default => 'Your_API_Key'  
-     preference :preferred_tax_cloud_origin, :string, :default => { 'Address1' =>  "Your_Street" ,
-
-								     'Address2' =>  nil ,
-
-								     'City' =>  "Your_City",
-
-								     'State' =>  "Your_State",
-
-								     'Zip5' =>  "Your_State" ,
-
-								     'Zip4' =>  nil  }.to_json
-    preference :preferred_tax_cloud_product_tic, :string, :default => 'Your_product_tic'
-    preference :preferred_tax_cloud_shipping_tic, :string, :default => 'Your_shipping_tic'
+Go to configurations, then on left side of page
+will be a link for TaxCloud settings. Enter your
+login, api_id, product tic, shipping tic, and business address.
  
-   end
-
 
 
 ===TODO
