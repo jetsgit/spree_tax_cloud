@@ -27,7 +27,7 @@ module Spree
 
                               'cartItems' => {'CartItem' => tax_cloud_transaction.cart_items.map(&:to_hash)},
 
-                             'origin' =>   JSON.parse( Spree::Config.get( :taxcloud_origin )) , 
+                             'origin' =>   JSON.parse( Spree::Config.taxcloud_origin ) , 
 			       
                              'destination' => destination_address(order.ship_address)
                            })
@@ -79,9 +79,9 @@ module Spree
        
       def default_body
 
-	 { 'apiLoginID' => Spree::Config.get( :taxcloud_api_login_id ),
+	 { 'apiLoginID' => Spree::Config.taxcloud_api_login_id ,
 
-	 'apiKey' => Spree::Config.get( :taxcloud_api_key ) }
+	 'apiKey' => Spree::Config.taxcloud_api_key  }
 
       end
 

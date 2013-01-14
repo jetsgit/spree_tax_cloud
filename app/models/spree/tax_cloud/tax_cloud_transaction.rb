@@ -74,7 +74,7 @@ module Spree
 
       def capture
 
-	 begin
+	 # begin
 
 	    tax_cloud.capture(self)
 
@@ -82,7 +82,7 @@ module Spree
 
 	 #    Exceptional.handle ex
 
-	 end
+	 # end
 
       end
 
@@ -106,7 +106,7 @@ module Spree
 
 	       :index => (index += 1),
 
-	       :tic => Spree::Config.get( :taxcloud_product_tic ) , 
+	       :tic => Spree::Config.taxcloud_product_tic , 
 
 	       :sku => line_item.variant.sku.presence || line_item.variant.id,
 
@@ -124,7 +124,7 @@ module Spree
 
 	    :index => (index += 1),
 
-	    :tic =>  Spree::Config.get( :taxcloud_shipping_tic ),  
+	    :tic =>  Spree::Config.taxcloud_shipping_tic ,  
 
 	    :sku => 'SHIPPING',
 
