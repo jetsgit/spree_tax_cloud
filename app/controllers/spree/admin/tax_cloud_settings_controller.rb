@@ -2,6 +2,8 @@ module Spree
 
   class Admin::TaxCloudSettingsController < Admin::BaseController
 
+    respond_to	:html
+
     def show
     end
 

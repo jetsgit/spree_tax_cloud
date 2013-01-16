@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.description = 'Spree extension for providing Tax Cloud services in USA.'
 
   s.required_ruby_version = '>= 1.9.3'
-  s.add_dependency('spree_core', '> 1.1.3')
+  s.add_dependency('spree_core', '> 1.3.1')
   s.add_runtime_dependency 'savon', '1.2.0'
 
 
