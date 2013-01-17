@@ -27,7 +27,7 @@ Spree::Order.class_eval do
 
 	tax_cloud_transaction.lookup
 
-	adjustment = Spree::Adjustment.where("originator_id = ?", tax_cloud_transaction.id)
+	Spree::Adjustment.where("originator_id = ?", tax_cloud_transaction.id)
 
 
       else
