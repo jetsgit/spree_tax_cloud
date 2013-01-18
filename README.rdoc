@@ -19,12 +19,10 @@ Run below to install migrations:
 
     bundle exec rails g spree_tax_cloud:install 
 
-At this time, you must manually copy the ca-bundle.crt 
-to your application's lib directory.
 
 ===Configure in Spree Admin
 
-Go to configurations, then on left side of page
+Go to configurations, then on left (or right) side of page
 will be a link for TaxCloud settings. Enter your
 login, api_id, product tic, shipping tic, and business address.
  
@@ -32,13 +30,10 @@ login, api_id, product tic, shipping tic, and business address.
 
 ===TODO
 
-At this time there is a known error that happenes if the checkout process
-is abandoned and then returned to. The tax amount does not get updated if
-a product is deleted or added to the cart. We are working on this issue
-and any suggestions appreciated.
 
-Note: at this time spree_tax_cloud does not handle multiple tax category tic's
-
++)  At this time spree_tax_cloud does not handle multiple tax category tic's
++)  In Spree v.1.3.2-beta, tax is displayed in the cart. At this time that
+    is not updated if returning to cart after initiating checkout process.
 
 ===COPYRIGHT
 
