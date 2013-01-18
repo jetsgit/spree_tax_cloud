@@ -19,8 +19,6 @@ Run below to install migrations:
 
     bundle exec rails g spree_tax_cloud:install 
 
-At this time, you must manually copy the ca-bundle.crt 
-to your application's lib directory.
 
 ===Configure in Spree Admin
 
@@ -36,7 +34,7 @@ At this time there is a known issue that happenes if the checkout process
 is abandoned and then returned to. The tax amount does not get updated in
 the cart.
 
-Note: at this time spree_tax_cloud does not handle multiple tax category tic's
+Note:  spree_tax_cloud does not handle multiple tax category tic's
 
 
 ===COPYRIGHT
