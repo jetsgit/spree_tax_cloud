@@ -5,11 +5,11 @@ Spree::Order.class_eval do
    has_one :tax_cloud_transaction
 
 
-   self.state_machine.after_transition :to => 'payment',
+   self.state_machine.after_transition :to => :payment,
 					      :do => :lookup_tax_cloud,
 					      :if => :tax_cloud_eligible?
   
-   self.state_machine.after_transition :to => 'complete',
+   self.state_machine.after_transition :to => :complete,
 					     :do => :capture_tax_cloud,
 					     :if => :tax_cloud_eligible?
 
@@ -27,13 +27,14 @@ Spree::Order.class_eval do
 
 	tax_cloud_transaction.lookup
 
+	Spree::Adjustment.where("originator_id = ?", tax_cloud_transaction.id)
+
+
       else
 
 	 create_tax_cloud_transaction
 
 	 tax_cloud_transaction.lookup
-
-	  
 
 	 adjustments.create do |adjustment|
 
