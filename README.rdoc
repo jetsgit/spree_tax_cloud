@@ -32,10 +32,9 @@ login, api_id, product tic, shipping tic, and business address.
 
 ===TODO
 
-At this time there is a known error that happenes if the checkout process
-is abandoned and then returned to. The tax amount does not get updated if
-a product is deleted or added to the cart. We are working on this issue
-and any suggestions appreciated.
+At this time there is a known issue that happenes if the checkout process
+is abandoned and then returned to. The tax amount does not get updated in
+the cart.
 
 Note: at this time spree_tax_cloud does not handle multiple tax category tic's
 
