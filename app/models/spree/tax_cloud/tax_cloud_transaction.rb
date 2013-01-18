@@ -1,8 +1,7 @@
 # Designed to be the Originator for an Adjustment
 
 # on an order
-
-require 'exceptional'
+# require 'exceptional'
 require 'spree/tax_cloud'
 require 'spree/tax_cloud/tax_cloud_cart_item'
 require_dependency 'spree/order'
@@ -18,9 +17,7 @@ module Spree
 
       has_many :cart_items, :class_name => 'TaxCloudCartItem', :dependent => :destroy
 
-
       # called when order updates adjustments
-
 
       def update_adjustment(adjustment, source)
 
@@ -67,9 +64,9 @@ module Spree
 
 	    end
 
-	 rescue => ex
+	 # rescue => ex
 
-	    Exceptional.handle ex
+	 #    Exceptional.handle ex
 
 	 end
 
@@ -77,19 +74,18 @@ module Spree
 
       def capture
 
-	 begin
+	 # begin
 
 	    tax_cloud.capture(self)
 
-	 rescue => ex
+	 # rescue => ex
 
-	    Exceptional.handle ex
+	 #    Exceptional.handle ex
 
-	 end
+	 # end
 
       end
 
-       
       private
 
       def tax_cloud
@@ -98,7 +94,6 @@ module Spree
 
       end
 
-       
       def create_cart_items
 
 	 cart_items.clear
@@ -111,7 +106,7 @@ module Spree
 
 	       :index => (index += 1),
 
-	       :tic => '20020', # TODO   CLOTHING-ACCESSORY
+	       :tic => Spree::Config.taxcloud_product_tic , 
 
 	       :sku => line_item.variant.sku.presence || line_item.variant.id,
 
@@ -129,7 +124,7 @@ module Spree
 
 	    :index => (index += 1),
 
-	    :tic => '11010',
+	    :tic =>  Spree::Config.taxcloud_shipping_tic ,  
 
 	    :sku => 'SHIPPING',
 

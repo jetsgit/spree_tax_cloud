@@ -7,9 +7,6 @@ module Spree
 
     class TaxCloud
 
-      include Spree::Preferences::Preferable
-
-
       def lookup(tax_cloud_transaction)
 
 	client.request(:lookup) do
@@ -17,7 +14,7 @@ module Spree
 	    soap.body = lookup_params(tax_cloud_transaction)
 
 	end
-    
+
       end
 
       def lookup_params(tax_cloud_transaction)
@@ -30,21 +27,9 @@ module Spree
 
                               'cartItems' => {'CartItem' => tax_cloud_transaction.cart_items.map(&:to_hash)},
 
-                              
-                             'origin' => { 'Address1' =>  "P.O. Box 944" ,
-
-                                           'Address2' =>  nil ,
-
-                                           'City' =>  "Langley",
-
-                                           'State' =>  "Wa",
-
-                                           'Zip5' =>  "98260" ,
-
-                                           'Zip4' =>  nil  }, 
-
+                             'origin' =>   JSON.parse( Spree::Config.taxcloud_origin ) , 
+			       
                              'destination' => destination_address(order.ship_address)
-                    
                            })
 
       end
@@ -94,16 +79,14 @@ module Spree
        
       def default_body
 
-	 { 'apiLoginID' => Spree::Config.preferred_tax_cloud_api_login_id,
+	 { 'apiLoginID' => Spree::Config.taxcloud_api_login_id ,
 
-	 'apiKey' => Spree::Config.preferred_tax_cloud_api_key }
-	 
+	 'apiKey' => Spree::Config.taxcloud_api_key  }
 
       end
 
-
       def cart_items(line_items)
-
+	 
 	 index = 0
 
 	 line_items.map do |line_item|
@@ -136,11 +119,10 @@ module Spree
 	 'Zip4' =>  nil  }
 
       end
-       
 
       def preference_cache_key(name)
 
-	 [self.class.name, name].join('::').underscore
+	[self.class.name, name].join('::').underscore
 
       end
 

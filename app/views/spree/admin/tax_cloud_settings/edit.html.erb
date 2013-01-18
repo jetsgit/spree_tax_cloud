@@ -1,0 +1,63 @@
+<%= render :partial => 'spree/admin/shared/configuration_menu' %>
+<% origin = JSON.parse( Spree::Config.taxcloud_origin )  %>
+<h1><%= t('taxcloud_settings') %></h1>
+
+<%= form_tag(admin_tax_cloud_settings_path, :method => :put, :id => :tax_cloud_settings_form) do %>
+
+  <div class="yui-g">
+    <div class="yui-u first">
+      <fieldset>
+        <legend><%= t('taxcloud_api_login_and_key') %></legend>
+        <p>
+          <label><%= t('tax_cloud_api_login_id') %></label><br />
+          <%= text_field_tag('settings[taxcloud_api_login_id]', Spree::Config.taxcloud_api_login_id, :size => 46, :maxlength => 256, :class => 'tax_cloud') %>
+        </p>
+        <p>
+          <label><%= t('taxcloud_api_key') %></label><br />
+          <%= text_field_tag('settings[taxcloud_api_key]', Spree::Config.taxcloud_api_key, :maxlength => 256, :class => 'tax_cloud') %>
+        </p>
+      </fieldset>
+    
+      <fieldset>
+        <legend><%= t('taxcloud_taxability_codes') %></legend>
+        <p>
+          <label><%= t('tax_cloud_product_taxability_code') %></label><br />
+          <%= text_field_tag('settings[taxcloud_product_tic]', Spree::Config.taxcloud_product_tic, :size => 46, :maxlength => 256, :class => 'tax_cloud') %>
+        </p>
+        <p>
+          <label><%= t('taxcloud_shipping_taxability_code') %></label><br />
+          <%= text_field_tag('settings[taxcloud_shipping_tic]', Spree::Config.taxcloud_shipping_tic, :maxlength => 256, :class => 'tax_cloud') %>
+        </p>
+      </fieldset>
+
+      <fieldset>
+        <legend><%= t('business_address') %></legend>
+        <p>
+          <label><%= t('address_1') %></label><br />
+	  <%= text_field_tag('address[taxcloud_address1]', origin["Address1"], :size => 46, :maxlength => 256, :class => 'tax_cloud') %>
+        </p>
+        <p>
+          <label><%= t('address_2') %></label><br />
+	  <%= text_field_tag('address[taxcloud_address2]', origin["Address2"], :size => 46, :maxlength => 256, :class => 'tax_cloud') %>
+        </p>
+        <p>
+          <label><%= t('city') %></label><br />
+	  <%= text_field_tag('address[taxcloud_city]', origin["City"], :size => 46, :maxlength => 256, :class => 'tax_cloud') %>
+        </p>
+        <p>
+          <label><%= t('state') %></label><br />
+	  <%= text_field_tag('address[taxcloud_state]', origin["State"], :size => 46, :maxlength => 256, :class => 'tax_cloud') %>
+        </p>
+        <p>
+          <label><%= t('zip5') %></label><br />
+	  <%= text_field_tag('address[taxcloud_zip5]', origin["Zip5"], :size => 46, :maxlength => 256, :class => 'tax_cloud') %>
+        </p>
+
+      </fieldset>
+    </div>
+  </div>
+
+  <p class="form-buttons"><%= button t('save_preferences') %></p>
+
+<% end -%>
+

@@ -17,52 +17,27 @@ Create an account with TaxCloud:
 Run below to install migrations:
 
 
-    bundle exec rake spree_tax_cloud:install:migrations
+    bundle exec rails g spree_tax_cloud:install 
 
-...then
+At this time, you must manually copy the ca-bundle.crt 
+to your application's lib directory.
 
-    bundle exec rake db:migrate
+===Configure in Spree Admin
 
-Create the following file:
-
-    app/models/spree/app_configuration_decorator.rb 
-
-...and config your api_login_id and api_key:
-
-   Spree::AppConfiguration.class_eval do
-     preference :preferred_tax_cloud_api_login_id, :string, :default => 'Your_Login' 
-     preference :preferred_tax_cloud_api_key, :string, :default => 'Your_API_Key'  
-   end
-
-Set the 'origin' in app/models/spree/tax_cloud.rb to be that of your business:
+Go to configurations, then on left side of page
+will be a link for TaxCloud settings. Enter your
+login, api_id, product tic, shipping tic, and business address.
+ 
 
 
+===TODO
 
-  'origin' => { 'Address1' =>  "Your_Street" ,
-
-		'Address2' =>  nil ,
-
-		'City' =>  "Your_City",
-
-		'State' =>  "Your_State",
-
-		'Zip5' =>  "Your_Zip" ,
-
-		'Zip4' =>  nil  }, 
-
-
-Set the product :tic to the product you are selling in app/models/spree/tax_cloud/tax_cloud_transaction:
-
-
-		:tic => '00000', 
+At this time there is a known error that happenes if the checkout process
+is abandoned and then returned to. The tax amount does not get updated if
+a product is deleted or added to the cart. We are working on this issue
+and any suggestions appreciated.
 
 Note: at this time spree_tax_cloud does not handle multiple tax category tic's
-
-
-In order to use this extension, you must fork it due to the setting of 
-parameters in the extension. The alternative would be to create decorators
-for the 2 above files.
-
 
 
 ===COPYRIGHT
