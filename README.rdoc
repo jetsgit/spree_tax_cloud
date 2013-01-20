@@ -29,13 +29,10 @@ login, api_id, product tic, shipping tic, and business address.
  
 
 
-===TODO
-
-Modify update! so it will check to see if tax_cloud_transaction is present,
-and if so update taxes in the cart.
+===NOTE
 
 
-Note: at this time spree_tax_cloud does not handle multiple tax category tic's
+At this time spree_tax_cloud does not handle multiple tax category tic's
 
 
 ===COPYRIGHT
