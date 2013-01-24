@@ -33,11 +33,11 @@ Spree::Order.class_eval do
 
 	 unless adjustments.promotion.blank?
 
-	       matched_line_items = self.line_items.select do |line_item|
-		    line_item.product.tax_category == rate.tax_category
-	       end
+	       # matched_line_items = line_items.select do |line_item|
+		    # line_item.product.tax_category == rate.tax_category
+	       # end
 
-	       line_items_total = matched_line_items.sum(&:total) 
+	       line_items_total = line_items.map.sum(&:total) 
 	       
 	       promo_rate = tax_cloud_transaction.amount / line_items_total
 	       
@@ -69,15 +69,15 @@ Spree::Order.class_eval do
 
 	    unless adjustments.promotion.blank?
 
-	       matched_line_items = self.line_items.select do |line_item|
-		    line_item.product.tax_category == rate.tax_category
-	       end
+	       # matched_line_items = line_items.select do |line_item|
+		    # line_item.product.tax_category == rate.tax_category
+	       # end
 
-	       line_items_total = matched_line_items.sum(&:total) 
+	       line_items_total = line_items.map.sum(&:total) 
 	       
 	       promo_rate = tax_cloud_transaction.amount / line_items_total
 	       
-	       adjusted_total = line_items_total + self.promotions_total 
+	       adjusted_total = line_items_total + promotions_total 
 
 	       adjustment.amount = order.line_items.empty? ? 0 : adjusted_total * promo_rate
 
