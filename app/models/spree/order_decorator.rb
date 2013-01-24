@@ -43,7 +43,7 @@ Spree::Order.class_eval do
 	       
 	       adjusted_total = line_items_total + self.promotions_total 
 
-	       adjustment.amount = order.line_items.empty? ? 0 : adjusted_total * promo_rate
+	       adjustment.amount = line_items.empty? ? 0 : adjusted_total * promo_rate
 	end 
 
 
@@ -79,7 +79,7 @@ Spree::Order.class_eval do
 	       
 	       adjusted_total = line_items_total + promotions_total 
 
-	       adjustment.amount = order.line_items.empty? ? 0 : adjusted_total * promo_rate
+	       adjustment.amount = line_items.empty? ? 0 : adjusted_total * promo_rate
 
 	    else
 
