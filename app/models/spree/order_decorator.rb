@@ -48,7 +48,9 @@ Spree::Order.class_eval do
 
 	    adjustment.eligible = true
 
-	    unless adjustments.eligible.promotion.sum(&:amount).blank?
+	    puts "In spree_tax_cloud, adjustments."
+
+	    unless order.promotion.blank?
 
 	       matched_line_items = order.line_items.select do |line_item|
 		    line_item.product.tax_category == rate.tax_category
