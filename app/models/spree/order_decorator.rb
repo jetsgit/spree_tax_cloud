@@ -29,7 +29,8 @@ Spree::Order.class_eval do
 
 	Spree::Adjustment.where("originator_id = ?", tax_cloud_transaction.id)
 
-	puts "In tax_cloud_existing: #{order.promotion}"
+	    puts "In existing spree_tax_cloud, adjustments. Value of promotions total: #{promotions_total}"
+	 
 
 	 unless adjustments.promotion.blank?
 
@@ -65,7 +66,7 @@ Spree::Order.class_eval do
 
 	    adjustment.eligible = true
 
-	    puts "In spree_tax_cloud, adjustments."
+	    puts "In create spree_tax_cloud, adjustments. Value of promotions total: #{promotions_total}"
 
 	    unless adjustments.promotion.blank?
 
