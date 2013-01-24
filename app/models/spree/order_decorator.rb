@@ -29,6 +29,23 @@ Spree::Order.class_eval do
 
 	Spree::Adjustment.where("originator_id = ?", tax_cloud_transaction.id)
 
+	puts "In tax_cloud_existing: #{order.promotion}"
+
+	 unless order.promotion.blank?
+
+	       matched_line_items = order.line_items.select do |line_item|
+		    line_item.product.tax_category == rate.tax_category
+	       end
+
+	       line_items_total = matched_line_items.sum(&:total) 
+	       
+	       promo_rate = tax_cloud_transaction.amount / line_items_total
+	       
+	       adjusted_total = line_items_total + order.promotions_total 
+
+	       adjustment.amount = order.line_items.empty? ? 0 : adjusted_total * promo_rate
+	end 
+
 
       else
 
