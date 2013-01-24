@@ -8,7 +8,11 @@ Spree::Order.class_eval do
    self.state_machine.after_transition :to => :payment,
 					      :do => :lookup_tax_cloud,
 					      :if => :tax_cloud_eligible?
+
+   self.state_machine.after_transition :to => :payment, 
   
+					      :do => Spree::Calculator::PromotionTax.compute(self)
+
    self.state_machine.after_transition :to => :complete,
 					     :do => :capture_tax_cloud,
 					     :if => :tax_cloud_eligible?
