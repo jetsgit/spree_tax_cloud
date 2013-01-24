@@ -1,7 +1,9 @@
 require_relative 'tax_cloud/tax_cloud_transaction'
-require 'spree/calculator/promotion_tax'
+require_dependency 'spree/calculator/promotion_tax'
 
 Spree::Order.class_eval do
+
+   include 'promotion_tax'
 
    has_one :tax_cloud_transaction
 
