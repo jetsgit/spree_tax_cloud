@@ -32,20 +32,20 @@ Spree::Order.class_eval do
 	    # puts "In existing spree_tax_cloud, adjustments. Value of promotions total: #{promotions_total}"
 	 
 
-	 unless adjustments.promotion.blank?
+	 # unless adjustments.promotion.blank?
 
 	       # matched_line_items = line_items.select do |line_item|
 		    # line_item.product.tax_category == rate.tax_category
 	       # end
 
-	       line_items_total = line_items.map.sum(&:total) 
-	       
-	       promo_rate = tax_cloud_transaction.amount / line_items_total
-	       
-	       adjusted_total = line_items_total + self.promotions_total 
+	#        line_items_total = line_items.map.sum(&:total) 
+	#        
+	#        promo_rate = tax_cloud_transaction.amount / line_items_total
+	#        
+	#        adjusted_total = line_items_total + self.promotions_total 
 
-	       adjustment.amount = line_items.empty? ? 0 : adjusted_total * promo_rate
-	end 
+	#        adjustment.amount = line_items.empty? ? 0 : adjusted_total * promo_rate
+	# end 
 
 
       else
@@ -68,25 +68,25 @@ Spree::Order.class_eval do
 
 	    # puts "In create spree_tax_cloud, adjustments. Value of promotions total: #{promotions_total}"
 
-	    unless adjustments.promotion.blank?
+	    # unless adjustments.promotion.blank?
 
-	       # matched_line_items = line_items.select do |line_item|
+	    #    # matched_line_items = line_items.select do |line_item|
 		    # line_item.product.tax_category == rate.tax_category
-	       # end
+	    #    # end
 
-	       line_items_total = line_items.map.sum(&:total) 
-	       
-	       promo_rate = tax_cloud_transaction.amount / line_items_total
-	       
-	       adjusted_total = line_items_total + promotions_total 
+	    #    line_items_total = line_items.map.sum(&:total) 
+	    #    
+	    #    promo_rate = tax_cloud_transaction.amount / line_items_total
+	    #    
+	    #    adjusted_total = line_items_total + promotions_total 
 
-	       adjustment.amount = line_items.empty? ? 0 : adjusted_total * promo_rate
+	    #    adjustment.amount = line_items.empty? ? 0 : adjusted_total * promo_rate
 
-	    else
+	    # else
 
-	       adjustment.amount = tax_cloud_transaction.amount
-	    
-	    end
+	    #    adjustment.amount = tax_cloud_transaction.amount
+	    # 
+	    # end
 
 	 end
 
