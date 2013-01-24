@@ -1,9 +1,7 @@
 require_relative 'tax_cloud/tax_cloud_transaction'
-require_dependency 'spree/calculator/promotion_tax'
+require 'spree/calculator/promotion_tax'
 
 Spree::Order.class_eval do
-
-   include 'promotion_tax'
 
    has_one :tax_cloud_transaction
 
@@ -14,7 +12,7 @@ Spree::Order.class_eval do
 
    self.state_machine.after_transition :to => :payment, 
   
-					      :do => Spree::Calculator::PromotionTax.compute(self)
+					      :do => self.update!
 
    self.state_machine.after_transition :to => :complete,
 					     :do => :capture_tax_cloud,
