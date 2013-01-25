@@ -15,5 +15,4 @@ Gem::Specification.new do |s|
   s.add_dependency('spree_core', '> 1.3.1')
   s.add_runtime_dependency 'savon', '1.2.0'
 
-
 end
