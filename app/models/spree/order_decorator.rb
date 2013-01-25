@@ -12,7 +12,7 @@ Spree::Order.class_eval do
 
    self.state_machine.after_transition :to => :payment, 
   
-					      :do => self.update!
+					      :do => :update!
 
    self.state_machine.after_transition :to => :complete,
 					     :do => :capture_tax_cloud,
@@ -34,25 +34,6 @@ Spree::Order.class_eval do
 
 	Spree::Adjustment.where("originator_id = ?", tax_cloud_transaction.id)
 
-	    # puts "In existing spree_tax_cloud, adjustments. Value of promotions total: #{promotions_total}"
-	 
-
-	 # unless adjustments.promotion.blank?
-
-	       # matched_line_items = line_items.select do |line_item|
-		    # line_item.product.tax_category == rate.tax_category
-	       # end
-
-	#        line_items_total = line_items.map.sum(&:total) 
-	#        
-	#        promo_rate = tax_cloud_transaction.amount / line_items_total
-	#        
-	#        adjusted_total = line_items_total + self.promotions_total 
-
-	#        adjustment.amount = line_items.empty? ? 0 : adjusted_total * promo_rate
-	# end 
-
-
       else
 
 	 create_tax_cloud_transaction
@@ -71,28 +52,6 @@ Spree::Order.class_eval do
 
 	    adjustment.eligible = true
 
-	    # puts "In create spree_tax_cloud, adjustments. Value of promotions total: #{promotions_total}"
-
-	    # unless adjustments.promotion.blank?
-
-	    #    # matched_line_items = line_items.select do |line_item|
-		    # line_item.product.tax_category == rate.tax_category
-	    #    # end
-
-	    #    line_items_total = line_items.map.sum(&:total) 
-	    #    
-	    #    promo_rate = tax_cloud_transaction.amount / line_items_total
-	    #    
-	    #    adjusted_total = line_items_total + promotions_total 
-
-	    #    adjustment.amount = line_items.empty? ? 0 : adjusted_total * promo_rate
-
-	    # else
-
-	    #    adjustment.amount = tax_cloud_transaction.amount
-	    # 
-	    # end
-
 	 end
 
       end
@@ -100,7 +59,6 @@ Spree::Order.class_eval do
    end
 
  
-
    def capture_tax_cloud
 
       return unless tax_cloud_transaction

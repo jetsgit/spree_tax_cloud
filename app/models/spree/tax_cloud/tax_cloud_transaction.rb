@@ -1,6 +1,6 @@
 # Designed to be the Originator for an Adjustment
-
 # on an order
+
 # require 'exceptional'
 require 'spree/tax_cloud'
 require 'spree/tax_cloud/tax_cloud_cart_item'
@@ -64,9 +64,6 @@ module Spree
 
 	    end
 
-	 # rescue => ex
-
-	 #    Exceptional.handle ex
 
 	 end
 
@@ -74,15 +71,8 @@ module Spree
 
       def capture
 
-	 # begin
 
 	    tax_cloud.capture(self)
-
-	 # rescue => ex
-
-	 #    Exceptional.handle ex
-
-	 # end
 
       end
 
