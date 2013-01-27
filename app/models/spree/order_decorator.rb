@@ -12,7 +12,7 @@ Spree::Order.class_eval do
 
    self.state_machine.after_transition :to => :payment, 
   
-					      :do => :update!
+					      :do => :create_tax_charge!
 
    self.state_machine.after_transition :to => :complete,
 					     :do => :capture_tax_cloud,
@@ -66,5 +66,6 @@ Spree::Order.class_eval do
       tax_cloud_transaction.capture
 
    end
+
 
 end
