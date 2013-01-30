@@ -52,6 +52,8 @@ Spree::Order.class_eval do
 
 	    adjustment.eligible = true
 
+	    adjustment.amount = tax_cloud_transaction.amount 
+
 	 end
 
       end
