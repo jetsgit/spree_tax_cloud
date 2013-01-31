@@ -69,5 +69,21 @@ Spree::Order.class_eval do
 
    end
 
+   def update_with_taxcloudlookup 
+
+      unless tax_cloud_transaction.nil?
+
+	tax_cloud_transaction.lookup 
+
+      end
+
+      update_without_taxcloud_lookup 
+
+   end
+
+   alias_method :update_without_taxcloud_lookup, :update! 
+   alias_method :update!, :update_with_taxcloudlookup 
+
+
 
 end
