@@ -1,15 +1,20 @@
 require_relative 'tax_cloud/tax_cloud_transaction'
+require 'spree/calculator/promotion_tax'
 
 Spree::Order.class_eval do
 
    has_one :tax_cloud_transaction
 
 
-   self.state_machine.after_transition :to => 'payment',
+   self.state_machine.after_transition :to => :payment,
 					      :do => :lookup_tax_cloud,
 					      :if => :tax_cloud_eligible?
+
+   self.state_machine.after_transition :to => :payment, 
   
-   self.state_machine.after_transition :to => 'complete',
+					      :do => :create_tax_charge!
+   
+   self.state_machine.after_transition :to => :complete,
 					     :do => :capture_tax_cloud,
 					     :if => :tax_cloud_eligible?
 
@@ -29,7 +34,6 @@ Spree::Order.class_eval do
 
 	Spree::Adjustment.where("originator_id = ?", tax_cloud_transaction.id)
 
-
       else
 
 	 create_tax_cloud_transaction
@@ -48,7 +52,7 @@ Spree::Order.class_eval do
 
 	    adjustment.eligible = true
 
-	    adjustment.amount = tax_cloud_transaction.amount
+	    adjustment.amount = tax_cloud_transaction.amount 
 
 	 end
 
@@ -57,7 +61,6 @@ Spree::Order.class_eval do
    end
 
  
-
    def capture_tax_cloud
 
       return unless tax_cloud_transaction
@@ -65,5 +68,22 @@ Spree::Order.class_eval do
       tax_cloud_transaction.capture
 
    end
+
+   def update_with_taxcloudlookup 
+
+      unless tax_cloud_transaction.nil?
+
+	tax_cloud_transaction.lookup 
+
+      end
+
+      update_without_taxcloud_lookup 
+
+   end
+
+   alias_method :update_without_taxcloud_lookup, :update! 
+   alias_method :update!, :update_with_taxcloudlookup 
+
+
 
 end
