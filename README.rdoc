@@ -32,12 +32,15 @@ login, api_id, product tic, shipping tic, and business address.
 ===NOTE
 
 
-At this time spree_tax_cloud does not handle multiple tax category tic's
+At this time spree_tax_cloud does not handle multiple tax category tic's,
+and verify address is not implemented. Capture and authorize are performed
+in 'capture'. Spree Tax Cloud is best used with Spree Promotion Tax to ensure
+promotions are deducted before tax is charged.
 
 
 ===COPYRIGHT
 
 
-Spree Tax Cloud Copyright (c) by Jerrold R Thompson (@whidbey) released under the 'new' BSD license.
+Spree Tax Cloud Copyright (c) by Jerrold R Thompson (@jet) released under the 'new' BSD license.
 
 
