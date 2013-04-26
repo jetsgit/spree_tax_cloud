@@ -18,18 +18,21 @@ module Spree
       has_many :cart_items, :class_name => 'TaxCloudCartItem', :dependent => :destroy
 
       # called when order updates adjustments
+      # This version will tax shipping, which is in cart_price
 
       def update_adjustment(adjustment, source)
 
-	 adjustment.update_attribute_without_callbacks(:amount, amount)
+	 tax_rate =  amount / cart_price
+
+	 taxable = ( cart_price + order.promotions_total )
+	
+	 tax = round_to_two_places( taxable * tax_rate) 
+
+	 adjustment.update_attribute_without_callbacks(:amount, tax)
 
       end
 
-      def amount
 
-	 cart_items.sum(&:amount)
-
-      end
 
       def lookup
 
@@ -64,7 +67,6 @@ module Spree
 
 	    end
 
-
 	 end
 
       end
@@ -76,7 +78,34 @@ module Spree
 
       end
 
+      def amount
+
+	 cart_items.map(&:amount).sum
+
+      end
+
+
       private
+
+
+      def cart_price
+	 
+	 total = 0
+	 cart_items.each do |item|
+
+	   total += ( item.price * item.quantity )
+
+	 end
+
+	 total
+
+      end
+       
+
+      def round_to_two_places(amount)
+	BigDecimal.new(amount.to_s).round(2, BigDecimal::ROUND_HALF_UP)
+      end
+       
 
       def tax_cloud
 

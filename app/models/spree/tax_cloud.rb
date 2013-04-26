@@ -27,9 +27,9 @@ module Spree
 
                               'cartItems' => {'CartItem' => tax_cloud_transaction.cart_items.map(&:to_hash)},
 
-                             'origin' =>   JSON.parse( Spree::Config.taxcloud_origin ) , 
+                              'origin' =>   JSON.parse( Spree::Config.taxcloud_origin ) , 
 			       
-                             'destination' => destination_address(order.ship_address)
+                              'destination' => destination_address(order.ship_address)
                            })
 
       end
