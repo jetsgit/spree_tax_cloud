@@ -1,45 +1,45 @@
 <%= render :partial => 'spree/admin/shared/configuration_menu' %>
 <% origin = JSON.parse( Spree::Config.taxcloud_origin )  %>
 
-<h1><%= t('taxcloud_settings') %></h1>
+<h1><%= Spree.t('taxcloud_settings') %></h1>
 
 <table>
   <tr>
-    <th scope="row"><%= t("taxcloud_api_login_id") %>:</th>
+    <th scope="row"><%= Spree.t("taxcloud_api_login_id") %>:</th>
     <td><%= Spree::Config.taxcloud_api_login_id %></td>
   </tr>
   <tr>
-    <th scope="row"><%= t("taxcloud_api_key") %>:</th>
+    <th scope="row"><%= Spree.t("taxcloud_api_key") %>:</th>
     <td><%= Spree::Config.taxcloud_api_key %></td>
   </tr>
   <tr>
-    <th scope="row"><%= t("tax_cloud_product_taxability_code") %>:</th>
+    <th scope="row"><%= Spree.t("tax_cloud_product_taxability_code") %>:</th>
     <td><%= Spree::Config.taxcloud_product_tic %></td>
   </tr>
   <tr>
-    <th scope="row"><%= t("taxcloud_shipping_taxability_code") %>:</th>
+    <th scope="row"><%= Spree.t("taxcloud_shipping_taxability_code") %>:</th>
     <td><%= Spree::Config.taxcloud_shipping_tic %></td>
   </tr>
 
   <tr>
-    <th scope="row"><%= t("business_address") %>:</th> 
+    <th scope="row"><%= Spree.t("business_address") %>:</th> 
   </tr>
   <tr>
-     <td><%= t("address1") %>: <%= origin["Address1"]  %> </td>
+     <td><%= Spree.t("address1") %>: <%= origin["Address1"]  %> </td>
   </tr>
   <tr>
-    <td><%= t("address2") %>: <%= origin["Address2"]  %></td>
+    <td><%= Spree.t("address2") %>: <%= origin["Address2"]  %></td>
   </tr>
   <tr>
-  	<td><%= t("city") %>: <%= origin["City"]  %></td>
+  	<td><%= Spree.t("city") %>: <%= origin["City"]  %></td>
   </tr>
   <tr>
-    <td><%= t("state") %>: <%= origin["State"]  %></td>
+    <td><%= Spree.t("state") %>: <%= origin["State"]  %></td>
   </tr>
   <tr>
-  	<td><%= t("zip_code") %>: <%= origin["Zip5"]  %></td>
+  	<td><%= Spree.t("zip_code") %>: <%= origin["Zip5"]  %></td>
   </tr>
   </table>
 
-<p><%= link_to_with_icon 'edit', t("edit"), edit_admin_tax_cloud_settings_path %></p>
+<p><%= link_to_with_icon 'edit', Spree.t("edit"), edit_admin_tax_cloud_settings_path %></p>
 
