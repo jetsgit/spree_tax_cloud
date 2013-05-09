@@ -3,106 +3,98 @@ require_relative 'tax_cloud/tax_cloud_transaction'
 
 Spree::Order.class_eval do
 
-   has_one :tax_cloud_transaction
+    has_one :tax_cloud_transaction
+
+    self.state_machine.after_transition :to => :payment, :do => :lookup_tax_cloud, :if => :tax_cloud_eligible?
+
+    self.state_machine.after_transition :to => :complete, :do => :capture_tax_cloud, :if => :tax_cloud_eligible?
 
 
-   self.state_machine.after_transition :to => :payment,
-					      :do => :lookup_tax_cloud,
-					      :if => :tax_cloud_eligible?
+    def tax_cloud_eligible?
 
-   
-   self.state_machine.after_transition :to => :complete,
-					     :do => :capture_tax_cloud,
-					     :if => :tax_cloud_eligible?
+        ship_address.try(:state_id?)
+
+    end
 
 
-   def tax_cloud_eligible?
+    def lookup_tax_cloud
 
-       ship_address.try(:state_id?)
+        unless tax_cloud_transaction.nil?
 
-   end
+            tax_cloud_transaction.lookup
 
+        else
 
-   def lookup_tax_cloud
+            create_tax_cloud_transaction
 
-      unless tax_cloud_transaction.nil?
+            tax_cloud_transaction.lookup
 
-	tax_cloud_transaction.lookup
+            tax_cloud_adjustment
 
-      else
+        end
 
-	 create_tax_cloud_transaction
-
-	 tax_cloud_transaction.lookup
-
-	 tax_cloud_adjustment
-
-      end
-
-   end
-   
-   def tax_cloud_adjustment
-
-      adjustments.create do |adjustment|
-
-	 adjustment.source = self
-
-	 adjustment.originator = tax_cloud_transaction
-
-	 adjustment.label = 'Tax'
-
-	 adjustment.mandatory = true
-
-	 adjustment.eligible = true
-
-	 adjustment.amount = tax_cloud_transaction.amount 
-
-      end
-   end
-    
+    end
 
 
- 
-   def capture_tax_cloud
+    def tax_cloud_adjustment
 
-      return unless tax_cloud_transaction
+        adjustments.create do |adjustment|
 
-      tax_cloud_transaction.capture
+            adjustment.source = self
 
-   end
+            adjustment.originator = tax_cloud_transaction
 
-   def tax_cloud_total(order)
+            adjustment.label = 'Tax'
 
-     line_items_total = order.line_items.sum(&:total)
+            adjustment.mandatory = true
 
-     cloud_rate = order.tax_cloud_transaction.amount / ( line_items_total + order.ship_total )  
+            adjustment.eligible = true
 
-     adjusted_total = line_items_total + order.promotions_total 
+            adjustment.amount = tax_cloud_transaction.amount
 
-     round_to_two_places( adjusted_total * cloud_rate ) 
-      
-   end
-
-   def round_to_two_places(amount)
-     BigDecimal.new(amount.to_s).round(2, BigDecimal::ROUND_HALF_UP)
-   end
+        end
+    end
 
 
-   def update_with_taxcloudlookup 
+    def capture_tax_cloud
 
-      unless tax_cloud_transaction.nil?
+        return unless tax_cloud_transaction
 
-	tax_cloud_transaction.lookup 
+        tax_cloud_transaction.capture
 
-      end
-
-      update_without_taxcloud_lookup 
-
-   end
-
-   # alias_method :update_without_taxcloud_lookup, :update! 
-   # alias_method :update!, :update_with_taxcloudlookup 
+    end
 
 
+    def tax_cloud_total(order)
 
+        line_items_total = order.line_items.sum(&:total)
+
+        cloud_rate = order.tax_cloud_transaction.amount / ( line_items_total + order.ship_total )
+
+        adjusted_total = line_items_total + order.promotions_total
+
+        round_to_two_places( adjusted_total * cloud_rate )
+
+    end
+
+
+    def round_to_two_places(amount)
+        BigDecimal.new(amount.to_s).round(2, BigDecimal::ROUND_HALF_UP)
+    end
+
+
+    def update_with_taxcloudlookup
+
+        unless tax_cloud_transaction.nil?
+
+            tax_cloud_transaction.lookup
+
+        end
+
+        update_without_taxcloud_lookup
+
+    end
+
+    # alias_method :update_without_taxcloud_lookup, :update!
+    # alias_method :update!, :update_with_taxcloudlookup
 end
