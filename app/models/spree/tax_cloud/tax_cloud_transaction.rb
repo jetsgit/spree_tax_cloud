@@ -24,7 +24,7 @@ module Spree
 
 	 tax_rate =  amount / cart_price
 
-	 taxable = ( cart_price + order.promotions_total )
+	 taxable = ( cart_price + order.adjustment_total )
 	
 	 tax = round_to_two_places( taxable * tax_rate) 
 
