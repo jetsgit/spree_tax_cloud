@@ -77,29 +77,28 @@ module Spree
         def default_body
 
             {
-                'apiLoginID' => Spree::Config.taxcloud_api_login_id ,
-                'apiKey' => Spree::Config.taxcloud_api_key
+                'apiLoginID' => Spree::Config.taxcloud_api_login_id,
+                'apiKey' => Spree::Config.taxcloud_api_key,
+                'uspsUserID' => Spree::Config.taxcloud_usps_user_id
             }
 
         end
 
         def cart_items(line_items)
 
-	   'apiKey' => Spree::Config.taxcloud_api_key,
-	   'uspsUserID' => Spree::Config.taxcloud_usps_user_id }
 
-	   line_items.map do |line_item|
+            line_items.map do |line_item|
 
-	       {
-		   'CartItem' => {
-		       'Index' => index,
-		       'ItemID' => line_item.variant_id,
-		       'Price' => line_item.price.to_f.to_s,
-		       'Qty' => line_item.quantity
-		   }
-	       }
+    	       {
+        		   'CartItem' => {
+        		       'Index' => index,
+        		       'ItemID' => line_item.variant_id,
+        		       'Price' => line_item.price.to_f.to_s,
+        		       'Qty' => line_item.quantity
+        		   }
+    	       }
 
-	   end
+    	   end
         end
 
 
