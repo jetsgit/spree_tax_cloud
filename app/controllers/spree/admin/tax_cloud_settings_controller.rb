@@ -14,12 +14,15 @@ module Spree
 					    :Address2 => origin[:taxcloud_address2],
 					    :City => origin[:taxcloud_city],
 					    :State => origin[:taxcloud_state],
-					    :Zip5 => origin[:taxcloud_zip5] }.to_json  
+					    :Zip5 => origin[:taxcloud_zip5],
+					    :Zip4 => origin[:taxcloud_zip4] }.to_json  
 
       Spree::Config.taxcloud_api_login_id = taxpref[:taxcloud_api_login_id] 
       Spree::Config.taxcloud_api_key = taxpref[:taxcloud_api_key] 
       Spree::Config.taxcloud_product_tic = taxpref[:taxcloud_product_tic] 
       Spree::Config.taxcloud_shipping_tic = taxpref[:taxcloud_shipping_tic] 
+      Spree::Config.taxcloud_usps_user_id = taxpref[:taxcloud_usps_user_id] 
+
 
       respond_to do |format|
 	format.html {

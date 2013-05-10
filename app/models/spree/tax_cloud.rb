@@ -81,7 +81,8 @@ module Spree
 
 	 { 'apiLoginID' => Spree::Config.taxcloud_api_login_id ,
 
-	 'apiKey' => Spree::Config.taxcloud_api_key  }
+	   'apiKey' => Spree::Config.taxcloud_api_key,
+	   'uspsUserID' => Spree::Config.taxcloud_usps_user_id }
 
       end
 

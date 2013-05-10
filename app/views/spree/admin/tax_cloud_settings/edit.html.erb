@@ -31,6 +31,14 @@
       </fieldset>
 
       <fieldset>
+        <legend><%= t('usps_user') %></legend>
+        <p>
+          <label><%= t('usps_user_id') %></label><br />
+          <%= text_field_tag('settings[taxcloud_usps_user_id]', Spree::Config.taxcloud_usps_user_id, :size => 46, :maxlength => 256, :class => 'tax_cloud') %>
+        </p>
+      </fieldset>
+
+      <fieldset>
         <legend><%= t('business_address') %></legend>
         <p>
           <label><%= t('address_1') %></label><br />

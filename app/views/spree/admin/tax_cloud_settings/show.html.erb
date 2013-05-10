@@ -20,26 +20,23 @@
     <th scope="row"><%= t("taxcloud_shipping_taxability_code") %>:</th>
     <td><%= Spree::Config.taxcloud_shipping_tic %></td>
   </tr>
+  <tr>
+    <th scope="row"><%= t("usps_user_id") %>:</th>
+    <td><%= Spree::Config.taxcloud_usps_user_id %></td>
+  </tr>
 
   <tr>
     <th scope="row"><%= t("business_address") %>:</th> 
-  </tr>
-  <tr>
-     <td><%= t("address1") %>: <%= origin["Address1"]  %> </td>
-  </tr>
-  <tr>
-    <td><%= t("address2") %>: <%= origin["Address2"]  %></td>
-  </tr>
-  <tr>
-  	<td><%= t("city") %>: <%= origin["City"]  %></td>
-  </tr>
-  <tr>
-    <td><%= t("state") %>: <%= origin["State"]  %></td>
-  </tr>
-  <tr>
-  	<td><%= t("zip_code") %>: <%= origin["Zip5"]  %></td>
-  </tr>
-  </table>
+
+    <td><table>
+<tr><td><%= t("address1") %>: <%= origin["address1"]  %> </td></tr>
+<tr><td><%= t("address2") %>: <%= origin["Address2"]  %></td></tr>
+<tr><td><%= t("city") %>: <%= origin["City"]  %></td></tr>
+<tr><td><%= t("state") %>: <%= origin["State"]  %></td></tr>
+<tr><td><%= t("zip_code") %>: <%= origin["Zip5"]  %></td></tr>
+</table></td>
+  </tr>    
+</table>
 
 <p><%= link_to_with_icon 'edit', t("edit"), edit_admin_tax_cloud_settings_path %></p>
 
