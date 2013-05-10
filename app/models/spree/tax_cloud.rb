@@ -88,18 +88,18 @@ module Spree
 	   'apiKey' => Spree::Config.taxcloud_api_key,
 	   'uspsUserID' => Spree::Config.taxcloud_usps_user_id }
 
-        line_items.map do |line_item|
+	   line_items.map do |line_item|
 
-            {
-                'CartItem' => {
-                    'Index' => index,
-                    'ItemID' => line_item.variant_id,
-                    'Price' => line_item.price.to_f.to_s,
-                    'Qty' => line_item.quantity
-                }
-            }
+	       {
+		   'CartItem' => {
+		       'Index' => index,
+		       'ItemID' => line_item.variant_id,
+		       'Price' => line_item.price.to_f.to_s,
+		       'Qty' => line_item.quantity
+		   }
+	       }
 
-            end
+	   end
         end
 
 
