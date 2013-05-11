@@ -5,7 +5,20 @@ require 'spree/tax_cloud/savon_xml_override'
 
 module Spree
 
-    class TaxCloud
+    class Tax_Cloud
+
+        def initialize
+            TaxCloud.configure do |config|
+                config.api_login_id = Spree::Config.taxcloud_api_login_id
+                config.api_key = Spree::Config.taxcloud_api_key
+
+                if Spree::Config.taxcloud_usps_user_id
+                    config.usps_username = Spree::Config.taxcloud_usps_user_id
+                else
+                    config.usps_username = nil
+                end
+            end
+        end
 
         def lookup(tax_cloud_transaction)
 
@@ -101,16 +114,26 @@ module Spree
     	   end
         end
 
-
         def destination_address(address)
 
+            addrobj = TaxCloud::Address.new({
+                :address1 => address.address1,
+                :address2 => address.address2,
+                :city => address.city,
+                :state => address.state.abbr,
+                :zip5 => address.zipcode[0..4]
+            })
+
+
+            verified_address = addrobj.verify
+
             {
-                'Address1' =>  address.address1 ,
-                'Address2' =>  address.address2 ,
-                'City' =>  address.city ,
-                'State' =>  address.state_text,
-                'Zip5' => address.zipcode[0..4] ,
-                'Zip4' =>  nil
+                'Address1' =>  verified_address.address1,
+                'Address2' =>  verified_address.address2,
+                'City' =>  verified_address.city,
+                'State' =>  verified_address.state,
+                'Zip5' => verified_address.zip5,
+                'Zip4' =>  verified_address.zip4
             }
 
         end
