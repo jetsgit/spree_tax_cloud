@@ -71,7 +71,7 @@ Spree::Order.class_eval do
 
         cloud_rate = order.tax_cloud_transaction.amount / ( line_items_total + order.ship_total )
 
-        adjusted_total = line_items_total + order.promotions_total
+        adjusted_total = line_items_total + order.adjustment_total
 
         round_to_two_places( adjusted_total * cloud_rate )
 
