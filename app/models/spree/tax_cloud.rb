@@ -7,126 +7,120 @@ module Spree
 
     class TaxCloud
 
-      def lookup(tax_cloud_transaction)
+        def lookup(tax_cloud_transaction)
 
-	client.request(:lookup) do
+            client.request(:lookup) do
 
-	    soap.body = lookup_params(tax_cloud_transaction)
+        	    soap.body = lookup_params(tax_cloud_transaction)
 
-	end
+            end
+        end
 
-      end
+        def lookup_params(tax_cloud_transaction)
 
-      def lookup_params(tax_cloud_transaction)
+            order = tax_cloud_transaction.order
 
-	 order = tax_cloud_transaction.order
+            default_body.merge({ 'customerID' => order.user_id || order.number,
 
-	 default_body.merge({ 'customerID' => order.user_id || order.number,
+                                  'cartID' => order.number,
 
-                              'cartID' => order.number,
+                                  'cartItems' => {'CartItem' => tax_cloud_transaction.cart_items.map(&:to_hash)},
 
-                              'cartItems' => {'CartItem' => tax_cloud_transaction.cart_items.map(&:to_hash)},
+                                  'origin' =>   JSON.parse( Spree::Config.taxcloud_origin ) , 
+    			       
+                                  'destination' => destination_address(order.ship_address)
+                               })
 
-                             'origin' =>   JSON.parse( Spree::Config.taxcloud_origin ) , 
-			       
-                             'destination' => destination_address(order.ship_address)
-                           })
+        end
 
-      end
+        def capture(tax_cloud_transaction)
 
-      def capture(tax_cloud_transaction)
+            order = tax_cloud_transaction.order
 
-	 order = tax_cloud_transaction.order
+            client.request(:authorized_with_capture) do
 
-	 client.request(:authorized_with_capture) do
+                soap.body =default_body.merge({
 
-	 soap.body =default_body.merge({
+                    'customerID' => order.user_id,
 
-	    'customerID' => order.user_id,
+                    'cartID' => order.number,
 
-	    'cartID' => order.number,
+                    'orderID' => order.number,
 
-	    'orderID' => order.number,
+                    'dateAuthorized' => DateTime.now,
 
-	    'dateAuthorized' => DateTime.now,
+                    'dateCaptured' => DateTime.now
 
-	    'dateCaptured' => DateTime.now
+        	    })
+            end
+        end
 
-	    })
+        def ping
 
-	end
+            client.request(:ping) do
 
-      end
+                soap.body = default_body
 
-      def ping
+            end
 
-	 client.request(:ping) do
+        end
 
-	    soap.body = default_body
+    private
 
-	 end
+        def client
 
-      end
+            @client ||= Savon::Client.new("https://api.taxcloud.net/1.0/?wsdl")
 
-      private
-
-      def client
-
-	 @client ||= Savon::Client.new("https://api.taxcloud.net/1.0/?wsdl")
-
-      end
-
-       
-      def default_body
-
-	 { 'apiLoginID' => Spree::Config.taxcloud_api_login_id ,
-
-	 'apiKey' => Spree::Config.taxcloud_api_key  }
-
-      end
-
-      def cart_items(line_items)
-	 
-	 index = 0
-
-	 line_items.map do |line_item|
-
-	    { 'CartItem' => { 'Index' => index,
-
-	    'ItemID' => line_item.variant_id,
-
-	    'Price' => line_item.price.to_f.to_s,
-
-	    'Qty' => line_item.quantity }}
-
-	 end
-
-      end
+        end
 
 
-      def destination_address(address)
+        def default_body
 
-	 { 'Address1' =>  address.address1 ,
+            {
+                'apiLoginID' => Spree::Config.taxcloud_api_login_id ,
+                'apiKey' => Spree::Config.taxcloud_api_key
+		'uspsUserID' => Spree::Config.taxcloud_usps_user_id }
 
-	 'Address2' =>  address.address2 ,
+            }
 
-	 'City' =>  address.city ,
+        end
 
-	 'State' =>  address.state_text,
+        def cart_items(line_items)
 
-	 'Zip5' => address.zipcode[0..4] ,
 
-	 'Zip4' =>  nil  }
+	   line_items.map do |line_item|
 
-      end
+	       {
+		   'CartItem' => {
+		       'Index' => index,
+		       'ItemID' => line_item.variant_id,
+		       'Price' => line_item.price.to_f.to_s,
+		       'Qty' => line_item.quantity
+		   }
+	       }
 
-      def preference_cache_key(name)
+	   end
+        end
 
-	[self.class.name, name].join('::').underscore
 
-      end
+        def destination_address(address)
 
+            {
+                'Address1' =>  address.address1 ,
+                'Address2' =>  address.address2 ,
+                'City' =>  address.city ,
+                'State' =>  address.state_text,
+                'Zip5' => address.zipcode[0..4] ,
+                'Zip4' =>  nil
+            }
+
+        end
+
+        def preference_cache_key(name)
+
+            [self.class.name, name].join('::').underscore
+
+        end
     end
-
 end
 
