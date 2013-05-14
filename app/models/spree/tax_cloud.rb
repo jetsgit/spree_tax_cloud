@@ -99,7 +99,8 @@ module Spree
 
         def cart_items(line_items)
 
-
+            index = 0
+            
             line_items.map do |line_item|
 
     	       {
