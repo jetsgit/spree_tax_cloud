@@ -16,8 +16,8 @@ module Savon #:nodoc:
 
           if used_namespaces[newpath]
             newhash.merge(
-              "#{used_namespaces[newpath]}:#{camelcased_key}" =>
-                add_namespaces_to_body(value, types[newpath] ? [types[newpath]] : newpath)
+            "#{used_namespaces[newpath]}:#{camelcased_key}" =>
+            add_namespaces_to_body(value, types[newpath] ? [types[newpath]] : newpath)
             )
           else
             newhash.merge(key => value)

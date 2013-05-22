@@ -18,15 +18,15 @@ class Spree::TaxCloudCartItem < ActiveRecord::Base
 
       {
 
-      'Index' => index,
+         'Index' => index,
 
-      'TIC' => tic,
+         'TIC' => tic,
 
-      'ItemID' => sku,
+         'ItemID' => sku,
 
-      'Price' => price.to_s,
+         'Price' => price.to_s,
 
-      'Qty' => quantity
+         'Qty' => quantity
 
       }
 
