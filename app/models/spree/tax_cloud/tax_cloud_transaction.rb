@@ -24,7 +24,7 @@ module Spree
 
             tax_rate =  amount / cart_price
 
-            taxable = ( cart_price + order.adjustment_total )
+            taxable = ( cart_price + order.promotions_total )
 
             tax = round_to_two_places( taxable * tax_rate)
 
@@ -91,6 +91,7 @@ module Spree
         def cart_price
 
             total = 0
+
             cart_items.each do |item|
 
                 total += ( item.price * item.quantity )
