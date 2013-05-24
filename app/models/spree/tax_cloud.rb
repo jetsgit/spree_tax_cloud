@@ -123,11 +123,7 @@ module Spree
                 :zip5 => address.zipcode[0..4]
             })
 
-
             verified_address = addrobj.verify
-            if verified_address.nil?
-                flash[:error] = Spree.t(:address_verification_failed)
-            end
 
             {
                 'Address1' =>  verified_address.address1,
