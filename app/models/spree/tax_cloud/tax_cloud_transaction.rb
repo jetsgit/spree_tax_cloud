@@ -18,18 +18,14 @@ module Spree
         has_many :cart_items, :class_name => 'TaxCloudCartItem', :dependent => :destroy
 
         # called when order updates adjustments
-        # This version will tax shipping, which is in cart_price
 
         def update_adjustment(adjustment, source)
 
-            tax_rate =  amount / cart_price
+            rate = amount / order.item_total
 
-            taxable = ( cart_price + order.promotions_total )
-
-            tax = round_to_two_places( taxable * tax_rate)
+            tax = (order.item_total - order.promotions_total) * rate
 
             adjustment.update_attribute_without_callbacks(:amount, tax)
-
         end
 
 
