@@ -28,14 +28,14 @@ will be a link for TaxCloud settings. Enter your
 login, api_id, product tic, shipping tic, and business address.
  
 
-
 ===NOTE
 
 
-At this time spree_tax_cloud does not handle multiple tax category tic's,
-and verify address is not implemented. Capture and authorize are performed
-in 'capture'. Spree Tax Cloud is best used with Spree Promotion Tax to ensure
-promotions are deducted before tax is charged.
+At this time spree_tax_cloud does not handle multiple tax category tic's.
+
+Capture and authorize are performed in 'capture'.
+
+Verify address is  implemented in 2-0-stable.
 
 
 ===COPYRIGHT
