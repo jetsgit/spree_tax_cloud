@@ -54,39 +54,17 @@ Spree::Order.class_eval do
       end
    end
 
-    def promotions_total
+   def promotions_total
 
-        adjustments.promotion.map(&:amount).sum.abs
-    end
-
-
-    def capture_tax_cloud
-
-        return unless tax_cloud_transaction
-
-        tax_cloud_transaction.capture
-
-    end
-end
-    end
-
-
-    def capture_tax_cloud
-
-        return unless tax_cloud_transaction
-
-        tax_cloud_transaction.capture
-
-    end
-end
-
+      adjustments.promotion.map(&:amount).sum.abs
    end
 
-    def capture_tax_cloud
 
-        return unless tax_cloud_transaction
+   def capture_tax_cloud
 
-        tax_cloud_transaction.capture
+      return unless tax_cloud_transaction
 
-    end
-end
+      tax_cloud_transaction.capture
+
+   end
+   end
