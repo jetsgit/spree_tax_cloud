@@ -18,3 +18,4 @@
 *.hold
 Gemfile.lock
 spec/dummy
+tags

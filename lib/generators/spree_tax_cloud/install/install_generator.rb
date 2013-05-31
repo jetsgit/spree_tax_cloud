@@ -8,7 +8,7 @@ module SpreeTaxCloud
 
       def copy_initializer_file
         template 'ca-bundle.crt', "#{file_name}/lib/ca-bundle.crt"
-      end 
+      end
 
       def add_migrations
         run 'bundle exec rake railties:install:migrations FROM=spree_tax_cloud'
@@ -24,4 +24,3 @@ module SpreeTaxCloud
       end
     end
   end
-end

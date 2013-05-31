@@ -2,35 +2,35 @@ require 'builder'
 
 class Spree::TaxCloudCartItem < ActiveRecord::Base
 
-   belongs_to :line_item
+    belongs_to :line_item
 
-   belongs_to :tax_cloud_transaction
+    belongs_to :tax_cloud_transaction
 
-   #validates :tax_cloud_transaction, :presence => true
+    #validates :tax_cloud_transaction, :presence => true
 
-   validates :index, :tic, :sku, :price, :quantity, :presence => true
+    validates :index, :tic, :sku, :price, :quantity, :presence => true
 
-   attr_accessible :index, :tic, :sku, :price, :quantity, :line_item
-   accepts_nested_attributes_for :line_item
+    attr_accessible :index, :tic, :sku, :price, :quantity, :line_item
+    accepts_nested_attributes_for :line_item
 
 
-   def to_hash
+    def to_hash
 
-      {
+        {
 
-      'Index' => index,
+            'Index' => index,
 
-      'TIC' => tic,
+            'TIC' => tic,
 
-      'ItemID' => sku,
+            'ItemID' => sku,
 
-      'Price' => price.to_s,
+            'Price' => price.to_s,
 
-      'Qty' => quantity
+            'Qty' => quantity
 
-      }
+        }
 
-   end
+    end
 
 end
 

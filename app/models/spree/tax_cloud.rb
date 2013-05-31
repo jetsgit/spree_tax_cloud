@@ -24,7 +24,7 @@ module Spree
 
             client.request(:lookup) do
 
-        	    soap.body = lookup_params(tax_cloud_transaction)
+                soap.body = lookup_params(tax_cloud_transaction)
 
             end
         end
@@ -35,14 +35,14 @@ module Spree
 
             default_body.merge({ 'customerID' => order.user_id || order.number,
 
-                                  'cartID' => order.number,
+                'cartID' => order.number,
 
-                                  'cartItems' => {'CartItem' => tax_cloud_transaction.cart_items.map(&:to_hash)},
+                'cartItems' => {'CartItem' => tax_cloud_transaction.cart_items.map(&:to_hash)},
 
-                                  'origin' =>   JSON.parse( Spree::Config.taxcloud_origin ) , 
-    			       
-                                  'destination' => destination_address(order.ship_address)
-                               })
+                'origin' =>   JSON.parse( Spree::Config.taxcloud_origin ) ,
+
+                'destination' => destination_address(order.ship_address)
+            })
 
         end
 
@@ -64,7 +64,7 @@ module Spree
 
                     'dateCaptured' => DateTime.now
 
-        	    })
+                })
             end
         end
 
@@ -78,11 +78,11 @@ module Spree
 
         end
 
-    private
+        private
 
         def client
 
-            @client ||= Savon::Client.new("https://api.taxcloud.net/1.0/?wsdl")
+            @client ||= Savon::Client.new('https://api.taxcloud.net/1.0/?wsdl')
 
         end
 
@@ -99,20 +99,18 @@ module Spree
 
         def cart_items(line_items)
 
-            index = 0
-            
             line_items.map do |line_item|
 
-    	       {
-        		   'CartItem' => {
-        		       'Index' => index,
-        		       'ItemID' => line_item.variant_id,
-        		       'Price' => line_item.price.to_f.to_s,
-        		       'Qty' => line_item.quantity
-        		   }
-    	       }
+                {
+                    'CartItem' => {
+                        'Index' => index,
+                        'ItemID' => line_item.variant_id,
+                        'Price' => line_item.price.to_f.to_s,
+                        'Qty' => line_item.quantity
+                    }
+                }
 
-    	   end
+            end
         end
 
         def destination_address(address)
@@ -124,7 +122,6 @@ module Spree
                 :state => address.state.abbr,
                 :zip5 => address.zipcode[0..4]
             })
-
 
             verified_address = addrobj.verify
 

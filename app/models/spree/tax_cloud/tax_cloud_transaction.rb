@@ -7,154 +7,151 @@ require 'spree/tax_cloud/tax_cloud_cart_item'
 require_dependency 'spree/order'
 module Spree
 
-  class TaxCloudTransaction < ActiveRecord::Base
+    class TaxCloudTransaction < ActiveRecord::Base
 
-      belongs_to :order
+        belongs_to :order
 
-      validates :order, :presence => true
+        validates :order, :presence => true
 
-      has_one :adjustment, :as => :originator
+        has_one :adjustment, :as => :originator
 
-      has_many :cart_items, :class_name => 'TaxCloudCartItem', :dependent => :destroy
+        has_many :cart_items, :class_name => 'TaxCloudCartItem', :dependent => :destroy
 
-      # called when order updates adjustments
-      # This version will tax shipping, which is in cart_price
+        # called when order updates adjustments
 
-      def update_adjustment(adjustment, source)
+        def update_adjustment(adjustment, source)
 
-	 tax_rate =  amount / cart_price
+            rate = amount / order.item_total
 
-	 taxable = ( cart_price + order.promotions_total )
-	
-	 tax = round_to_two_places( taxable * tax_rate) 
+            tax = (order.item_total - order.promotions_total) * rate
 
-	 adjustment.update_attribute_without_callbacks(:amount, tax)
+            adjustment.update_attribute_without_callbacks(:amount, tax)
+        end
 
-      end
 
 
+        def lookup
 
-      def lookup
+            begin
 
-	 begin
+                create_cart_items
 
-	    create_cart_items
+                response = tax_cloud.lookup(self)
 
-	    response = tax_cloud.lookup(self)
+                raise 'Tax Cloud Lookup Error' unless response.success?
 
-	    raise 'Tax Cloud Lookup Error' unless response.success?
 
+                transaction do
 
-	    transaction do
+                    unless response.body[:lookup_response][:lookup_result][:messages].nil?
 
-	       unless response.body[:lookup_response][:lookup_result][:messages].nil?
+                        self.message = response.body[:lookup_response][:lookup_result][:messages][:response_message][:message]
 
-		  self.message = response.body[:lookup_response][:lookup_result][:messages][:response_message][:message]
+                    end
 
-	       end
+                    self.save
 
-	       self.save
+                    response_cart_items = Array.wrap response.body[:lookup_response][:lookup_result][:cart_items_response][:cart_item_response]
 
-	       response_cart_items = Array.wrap response.body[:lookup_response][:lookup_result][:cart_items_response][:cart_item_response]
+                    response_cart_items.each do |response_cart_item|
 
-	       response_cart_items.each do |response_cart_item|
+                        cart_item = cart_items.find_by_index(response_cart_item[:cart_item_index].to_i)
 
-		  cart_item = cart_items.find_by_index(response_cart_item[:cart_item_index].to_i)
+                        cart_item.update_attribute(:amount, response_cart_item[:tax_amount].to_f)
 
-		  cart_item.update_attribute(:amount, response_cart_item[:tax_amount].to_f)
+                    end
 
-	       end
+                end
 
-	    end
+            end
 
-	 end
+        end
 
-      end
+        def capture
 
-      def capture
 
+            tax_cloud.capture(self)
 
-	    tax_cloud.capture(self)
+        end
 
-      end
+        def amount
 
-      def amount
+            cart_items.map(&:amount).sum
 
-	 cart_items.map(&:amount).sum
+        end
 
-      end
 
+        private
 
-      private
 
+        def cart_price
 
-      def cart_price
-	 
-	 total = 0
-	 cart_items.each do |item|
+            total = 0
 
-	   total += ( item.price * item.quantity )
+            cart_items.each do |item|
 
-	 end
+                total += ( item.price * item.quantity )
 
-	 total
+            end
 
-      end
-       
+            total
 
-      def round_to_two_places(amount)
-	BigDecimal.new(amount.to_s).round(2, BigDecimal::ROUND_HALF_UP)
-      end
-       
+        end
 
-      def tax_cloud
 
-	 @tax_cloud ||= Tax_Cloud.new
+        def round_to_two_places(amount)
+            BigDecimal.new(amount.to_s).round(2, BigDecimal::ROUND_HALF_UP)
+        end
 
-      end
 
-      def create_cart_items
+        def tax_cloud
 
-	 cart_items.clear
+            @tax_cloud ||= Tax_Cloud.new
 
-	 index = 0
+        end
 
-	 order.line_items.each do |line_item|
+        def create_cart_items
 
-	       cart_items.create!({
+            cart_items.clear
 
-	       :index => (index += 1),
+            index = 0
 
-	       :tic => Spree::Config.taxcloud_product_tic , 
+            order.line_items.each do |line_item|
 
-	       :sku => line_item.variant.sku.presence || line_item.variant.id,
+                cart_items.create!({
 
-	       :quantity => line_item.quantity,
+                    :index => (index += 1),
 
-	       :price => line_item.price.to_f,
+                    :tic => Spree::Config.taxcloud_product_tic ,
 
-	       :line_item => line_item
+                    :sku => line_item.variant.sku.presence || line_item.variant.id,
 
-	    })
+                    :quantity => line_item.quantity,
 
-	 end
+                    :price => line_item.price.to_f,
 
-	    cart_items.create!({  
+                    :line_item => line_item
 
-	    :index => (index += 1),
+                })
 
-	    :tic =>  Spree::Config.taxcloud_shipping_tic ,  
+            end
 
-	    :sku => 'SHIPPING',
+            cart_items.create!({
 
-	    :quantity => 1,
+                :index => (index += 1),
 
-	    :price => order.ship_total.to_f
+                :tic =>  Spree::Config.taxcloud_shipping_tic ,
 
-	 })
+                :sku => 'SHIPPING',
 
-      end
+                :quantity => 1,
 
-   end
+                :price => order.ship_total.to_f
+
+            })
+
+        end
+
+    end
 
 end

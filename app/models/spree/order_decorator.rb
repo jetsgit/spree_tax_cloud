@@ -54,55 +54,39 @@ Spree::Order.class_eval do
       end
    end
 
+    def promotions_total
 
-   def capture_tax_cloud
-
-      return unless tax_cloud_transaction
-
-      tax_cloud_transaction.capture
-
-   end
+        adjustments.promotion.map(&:amount).sum.abs
+    end
 
 
-   def tax_cloud_total(order)
+    def capture_tax_cloud
 
-      line_items_total = order.line_items.sum(&:total)
+        return unless tax_cloud_transaction
 
-      cloud_rate = order.tax_cloud_transaction.amount / ( line_items_total + order.ship_total )
+        tax_cloud_transaction.capture
 
-      adjusted_total = line_items_total + order.adjustment_total
-
-      round_to_two_places( adjusted_total * cloud_rate )
-
-   end
+    end
+end
+    end
 
 
-   def round_to_two_places(amount)
-      BigDecimal.new(amount.to_s).round(2, BigDecimal::ROUND_HALF_UP)
-   end
+    def capture_tax_cloud
 
-   def promotions_total
-      promotions = adjustments.eligible.select do |adjustment|
-	 adjustment.originator_type == "Spree::PromotionAction"  
-      end
-      promotions.map(&:amount).sum 
-   end
+        return unless tax_cloud_transaction
 
-   # Below is for testing, it permits update of tax in cart,
-   # but using it generates multiple calls to the tax cloud service
+        tax_cloud_transaction.capture
 
-   def update_with_taxcloudlookup
-
-      unless tax_cloud_transaction.nil?
-
-	 tax_cloud_transaction.lookup
-
-      end
-
-      update_without_taxcloud_lookup
+    end
+end
 
    end
 
-   # alias_method :update_without_taxcloud_lookup, :update!
-   # alias_method :update!, :update_with_taxcloudlookup
-   end
+    def capture_tax_cloud
+
+        return unless tax_cloud_transaction
+
+        tax_cloud_transaction.capture
+
+    end
+end
