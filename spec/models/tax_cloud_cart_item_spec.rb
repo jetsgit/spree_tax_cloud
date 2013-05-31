@@ -4,7 +4,7 @@ require 'spec_helper'
 
 describe Spree::TaxCloudCartItem do
 
-  let(:line_item) { Factory.create(:line_item) }
+  let(:line_item) { create(:line_item) }
 
   it "builds a hash with the line_item properties" do
 
