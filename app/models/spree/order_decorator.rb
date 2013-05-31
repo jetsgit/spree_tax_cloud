@@ -1,5 +1,4 @@
 require_relative 'tax_cloud/tax_cloud_transaction'
-# require 'spree/calculator/promotion_tax'
 
 Spree::Order.class_eval do
 
@@ -89,7 +88,8 @@ Spree::Order.class_eval do
       promotions.map(&:amount).sum 
    end
 
-
+   # Below is for testing, it permits update of tax in cart,
+   # but using it generates multiple calls to the tax cloud service
 
    def update_with_taxcloudlookup
 
