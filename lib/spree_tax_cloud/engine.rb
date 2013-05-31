@@ -17,3 +17,4 @@ module SpreeTaxCloud
       end
     end
   end
+end
