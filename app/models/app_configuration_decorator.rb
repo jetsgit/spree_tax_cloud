@@ -6,4 +6,3 @@ Spree::AppConfiguration.class_eval do
     preference :taxcloud_usps_user_id, :string
     preference :taxcloud_origin, :string, :default => {}.to_json
 end
-
