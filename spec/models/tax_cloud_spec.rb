@@ -1,11 +1,10 @@
 require 'spec_helper'
 
-
 module Spree
 
   describe TaxCloud do
 
-    let(:order) { Factory.build(:order, :ship_address => Factory.build(:address)) }
+    let(:order) { build(:order, :ship_address => build(:address)) }
 
     let(:tax_cloud_transaction) {
 
@@ -23,11 +22,11 @@ module Spree
 
     before :each do
 
+      pending 'No Idea what the Account model is...'
+
       @account = Account.first_or_default
 
-      @account.address = Factory.build(:address,
-
-      :zipcode => '90120')
+      @account.address = build(:address, :zipcode => '90120')
 
       @account.save
 
