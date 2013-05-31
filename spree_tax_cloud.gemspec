@@ -15,6 +15,5 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 1.9.3'
   s.add_dependency('spree_core', '> 1.3.1')
   s.add_runtime_dependency 'savon', '1.2.0'
-  s.add_runtime_dependency 'tax_cloud', '0.2.2'
 
 end
