@@ -7,18 +7,18 @@ Spree::Order.class_eval do
 
 
    self.state_machine.after_transition :to => :payment,
-					      :do => :lookup_tax_cloud,
-					      :if => :tax_cloud_eligible?
+      :do => :lookup_tax_cloud,
+      :if => :tax_cloud_eligible?
 
-   
+
    self.state_machine.after_transition :to => :complete,
-					     :do => :capture_tax_cloud,
-					     :if => :tax_cloud_eligible?
+      :do => :capture_tax_cloud,
+      :if => :tax_cloud_eligible?
 
 
    def tax_cloud_eligible?
 
-       ship_address.try(:state_id?)
+      ship_address.try(:state_id?)
 
    end
 
@@ -27,7 +27,7 @@ Spree::Order.class_eval do
 
       unless tax_cloud_transaction.nil?
 
-	tax_cloud_transaction.lookup
+	 tax_cloud_transaction.lookup
 
       else
 
@@ -40,7 +40,7 @@ Spree::Order.class_eval do
       end
 
    end
-   
+
    def tax_cloud_adjustment
 
       adjustments.create do |adjustment|
@@ -59,10 +59,10 @@ Spree::Order.class_eval do
 
       end
    end
-    
 
 
- 
+
+
    def capture_tax_cloud
 
       return unless tax_cloud_transaction
@@ -73,26 +73,34 @@ Spree::Order.class_eval do
 
    def tax_cloud_total(order)
 
-     line_items_total = order.line_items.sum(&:total)
+      line_items_total = order.line_items.sum(&:total)
 
-     cloud_rate = order.tax_cloud_transaction.amount / ( line_items_total + order.ship_total )  
+      cloud_rate = order.tax_cloud_transaction.amount / ( line_items_total + order.ship_total )  
 
-     adjusted_total = line_items_total + order.promotions_total 
+      adjusted_total = line_items_total + order.promotions_total 
 
-     round_to_two_places( adjusted_total * cloud_rate ) 
-      
+      round_to_two_places( adjusted_total * cloud_rate ) 
+
    end
 
    def round_to_two_places(amount)
-     BigDecimal.new(amount.to_s).round(2, BigDecimal::ROUND_HALF_UP)
+      BigDecimal.new(amount.to_s).round(2, BigDecimal::ROUND_HALF_UP)
    end
+
+   def promotions_total
+      promotions = adjustments.eligible.select do |adjustment|
+	 adjustment.originator_type == "Spree::PromotionAction"  
+      end
+      promotions.map(&:amount).sum 
+   end
+
 
 
    def update_with_taxcloudlookup 
 
       unless tax_cloud_transaction.nil?
 
-	tax_cloud_transaction.lookup 
+	 tax_cloud_transaction.lookup 
 
       end
 
@@ -105,4 +113,4 @@ Spree::Order.class_eval do
 
 
 
-end
+      end
