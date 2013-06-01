@@ -16,6 +16,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'spree_backend'
   s.add_dependency 'spree_core', '>= 2.0.0'
+  s.add_dependency 'spree_frontend'
 
   s.add_runtime_dependency 'savon', '1.2.0'
   s.add_runtime_dependency 'tax_cloud', '0.2.2'
@@ -23,6 +24,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'database_cleaner'
   s.add_development_dependency 'factory_girl_rails', '~> 4.2'
   s.add_development_dependency 'ffaker'
+  s.add_development_dependency 'generator_spec',     '~> 0.8'
   s.add_development_dependency 'rspec-rails',        '~> 2.13'
   s.add_development_dependency 'sass-rails'
   s.add_development_dependency 'selenium-webdriver'
