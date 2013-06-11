@@ -77,7 +77,7 @@ module Spree
       order.line_items.each do |line_item|
         cart_items.create!({
           :index => (index += 1),
-          :tic => Spree::Config.taxcloud_product_tic ,
+          :tic => Spree::Config.taxcloud_product_tic,
           :sku => line_item.variant.sku.presence || line_item.variant.id,
           :quantity => line_item.quantity,
           :price => line_item.price.to_f,
@@ -87,7 +87,7 @@ module Spree
 
       cart_items.create!({
         :index => (index += 1),
-        :tic =>  Spree::Config.taxcloud_shipping_tic ,
+        :tic =>  Spree::Config.taxcloud_shipping_tic,
         :sku => 'SHIPPING',
         :quantity => 1,
         :price => order.ship_total.to_f
