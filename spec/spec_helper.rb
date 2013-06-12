@@ -32,6 +32,13 @@ RSpec.configure do |config|
   # Without transactional fixtures set to false none of the records created to setup a test will be available to the browser, which runs under a seperate server instance.
   config.use_transactional_fixtures = false
 
+  config.before :suite do
+    Spree::Config[:taxcloud_api_login_id] = '395D0F00'
+    Spree::Config[:taxcloud_api_key]      = 'E191A9C3-75AD-49A5-917E-171E0C9CD396'
+    Spree::Config[:taxcloud_product_tic]  = '00000'
+    Spree::Config[:taxcloud_shipping_tic] = '11010'
+  end
+
   config.before :each do
     # Before each spec check if it is a Javascript test and switch between using database transactions or not where necessary.
     DatabaseCleaner.strategy = example.metadata[:js] ? :truncation : :transaction
