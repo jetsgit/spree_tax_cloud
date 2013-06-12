@@ -58,10 +58,6 @@ module Spree
       total
     end
 
-    def round_to_two_places(amount)
-      BigDecimal.new(amount.to_s).round(2, BigDecimal::ROUND_HALF_UP)
-    end
-
     def tax_cloud
       @tax_cloud ||= TaxCloud.new
     end
