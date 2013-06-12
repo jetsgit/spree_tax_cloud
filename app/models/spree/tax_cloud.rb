@@ -4,10 +4,10 @@ require 'savon'
 require 'spree/tax_cloud/savon_xml_override'
 
 module Spree
-  class Tax_Cloud
+  class TaxCloud
 
     def initialize
-      TaxCloud.configure do |config|
+      ::TaxCloud.configure do |config|
         config.api_login_id = Spree::Config.taxcloud_api_login_id
         config.api_key = Spree::Config.taxcloud_api_key
           if Spree::Config.taxcloud_usps_user_id

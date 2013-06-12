@@ -1,8 +1,5 @@
-# Designed to be the Originator for an Adjustment
-# on an order
+# Designed to be the Originator for an Adjustment on an order.
 
-require 'spree/tax_cloud'
-require 'spree/tax_cloud/tax_cloud_cart_item'
 require_dependency 'spree/order'
 
 module Spree
@@ -25,23 +22,21 @@ module Spree
     end
 
     def lookup
-      begin
-        create_cart_items
-        response = tax_cloud.lookup(self)
-        raise 'Tax Cloud Lookup Error' unless response.success?
+      create_cart_items
+      response = tax_cloud.lookup(self)
+      if response.success?
         transaction do
-          unless response.body[:lookup_response][:lookup_result][:messages].nil?
-            self.message = response.body[:lookup_response][:lookup_result][:messages][:response_message][:message]
+          if response.body[:lookup_response][:lookup_result][:cart_items_response].blank?
+            raise ::SpreeTaxCloud::Error, response.body[:lookup_response][:lookup_result][:messages][:response_message][:message]
           end
-
-          self.save
-
           response_cart_items = Array.wrap response.body[:lookup_response][:lookup_result][:cart_items_response][:cart_item_response]
           response_cart_items.each do |response_cart_item|
             cart_item = cart_items.find_by_index(response_cart_item[:cart_item_index].to_i)
             cart_item.update_attribute(:amount, response_cart_item[:tax_amount].to_f)
           end
         end
+      else
+        raise ::SpreeTaxCloud::Error, 'TaxCloud response unsuccessful!'
       end
     end
 
@@ -68,7 +63,7 @@ module Spree
     end
 
     def tax_cloud
-      @tax_cloud ||= Tax_Cloud.new
+      @tax_cloud ||= TaxCloud.new
     end
 
     def create_cart_items
