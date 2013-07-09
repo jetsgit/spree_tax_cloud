@@ -32,7 +32,7 @@ Spree::Order.class_eval do
   end
 
   def promotions_total
-    adjustments.promotion.map(&:amount).sum.abs
+    adjustments.eligible.promotion.map(&:amount).sum.abs
   end
 
   def capture_tax_cloud
