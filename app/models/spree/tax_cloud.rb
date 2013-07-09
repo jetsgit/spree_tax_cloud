@@ -81,27 +81,18 @@ module Spree
         end
 
         def destination_address(address)
-          address_hash = {
-            'Address1' => address.address1,
-            'Address2' => address.address2,
-            'City'     => address.city,
-            'State'    => address.state.abbr,
-            'Zip5'     => address.zipcode[0..4]
-          }
+          address = ::TaxCloud::Address.new({
+            :address1 => address.address1,
+            :address2 => address.address2,
+            :city     => address.city,
+            :state    => address.state.abbr,
+            :zip5     => address.zipcode[0..4]
+          })
           # Only attempt to verify address if user has configured their USPS account.
-          if Spree::Config.taxcloud_usps_user_id
-            tax_cloud_address = TaxCloud::Address.new address_hash
-            verified_address  = tax_cloud_address.verify
-            address_hash = {
-              'Address1' => verified_address.address1,
-              'Address2' => verified_address.address2,
-              'City'     => verified_address.city,
-              'State'    => verified_address.state,
-              'Zip5'     => verified_address.zip5,
-              'Zip4'     => verified_address.zip4
-            }
+          if Spree::Config.taxcloud_usps_user_id.present?
+            address = address.verify
           end
-          address_hash
+          address.to_hash
         end
 
         def origin_address
