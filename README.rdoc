@@ -9,7 +9,7 @@ Based on the work of Chris Mar and Drew Tempelmeyer.
 
 Create an account with TaxCloud:
 
-	https://taxcloud.net
+  https://taxcloud.net
 
 ...and get an api_login_id and api_key.
 
@@ -26,8 +26,16 @@ Run below to install migrations:
 Go to configurations, then on left side of page
 will be a link for TaxCloud settings. Enter your
 login, api_id, product tic, shipping tic, and business address.
- 
 
+
+
+===Handle exceptions
+There are several exceptions that SpreeTaxCloud can throw. You may want to use
+the rescue_from method (http://apidock.com/rails/ActiveSupport/Rescuable/ClassMethods/rescue_from)
+in your Spree checkout controller to handle the following exceptions:
+
+- TaxCloudAPILoginMissing
+- TaxCloudAPIKeyMissing
 
 ===NOTE
 
