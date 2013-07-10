@@ -59,7 +59,7 @@ module Spree
     end
 
     def tax_cloud
-      @tax_cloud ||= TaxCloud.new
+      @tax_cloud ||= Spree::TaxCloud.new
     end
 
     def create_cart_items
