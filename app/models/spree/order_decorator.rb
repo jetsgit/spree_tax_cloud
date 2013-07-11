@@ -1,5 +1,4 @@
 require_relative 'tax_cloud/tax_cloud_transaction'
-# require 'spree/calculator/promotion_tax'
 
 Spree::Order.class_eval do
 
