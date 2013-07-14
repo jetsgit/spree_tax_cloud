@@ -17,7 +17,8 @@ module Spree
 
     def update_adjustment(adjustment, source)
       rate = amount / order.item_total
-      tax = (order.item_total - order.promotions_total) * rate
+      tax  = (order.item_total - order.promotions_total) * rate
+      tax  = 0 if tax.nan?
       adjustment.update_attribute_without_callbacks(:amount, tax)
     end
 
