@@ -59,6 +59,20 @@ describe 'Checkout', js: true do
     page.should have_content("Tax: $0.00")
   end
 
+  it 'should not break when removing all items from cart after a tax calculation has been created' do
+    fill_in "order_email", :with => "test@example.com"
+    click_button "Continue"
+    fill_in_address
+    click_button "Save and Continue"
+    click_button "Save and Continue"
+    # TODO update seeds to make an order with actual tax
+    page.should have_content("Tax: $0.00")
+    visit spree.cart_path
+    find('a.delete').click
+    page.should have_content('Shopping Cart')
+    page.should_not have_content('Internal Server Error')
+  end
+
   def fill_in_address
     address = "order_bill_address_attributes"
     fill_in "#{address}_firstname", :with => "John"
