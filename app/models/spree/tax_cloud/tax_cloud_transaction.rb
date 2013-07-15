@@ -95,6 +95,8 @@ module Spree
 
 
     def create_cart_items
+      raise TaxCloudProductTicMissing.new unless Spree::Config.taxcloud_product_tic.present?
+      raise TaxCloudShippingTicMissing.new unless Spree::Config.taxcloud_shipping_tic.present?
       cart_items.clear
       index = 0
       order.line_items.each do |line_item|
