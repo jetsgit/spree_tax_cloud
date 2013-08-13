@@ -56,7 +56,7 @@ module Spree
       private
 
         def client
-          @client ||= Savon::Client.new('https://api.taxcloud.net/1.0/?wsdl')
+          @@client ||= Savon::Client.new('https://api.taxcloud.net/1.0/?wsdl')
         end
 
         def default_body
