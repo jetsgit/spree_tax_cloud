@@ -9,7 +9,7 @@ Based on the work of Chris Mar and Drew Tempelmeyer.
 
 Create an account with TaxCloud:
 
-	https://taxcloud.net
+  https://taxcloud.net
 
 ...and get an api_login_id and api_key.
 
@@ -26,7 +26,30 @@ Run below to install migrations:
 Go to configurations, then on left side of page
 will be a link for TaxCloud settings. Enter your
 login, api_id, product tic, shipping tic, and business address.
- 
+
+
+
+===Exceptions
+Handling exceptions during Spree's checkout state machine is an important
+part of integrating Tax Cloud. There are two broad cases which spree_tax_cloud handles:
+
+====A HTTP response != 200
+If for any reason a connection cannot be made to Tax Cloud, or the API's HTTP response code is
+something other than 200, this error is silently ignored, allowing checkout to proceed without
+a tax calculation. You can change this default by overriding Spree::Order#handle_unknown_lookup_error
+and Spree::Order#handle_unknown_capture_error.
+
+
+====A HTTP response == 200, 
+If communication is functioning properly with the API, but the submitted data, causes
+the API to return an error code during lookup or capture, the error is silently ignored, 
+allowing checkout to proceed without a tax calculation. You can change this default by 
+overriding Spree::Order#rescue_tax_cloud_lookup_error and Spree::Order#rescue_tax_cloud_capture_error.
+
+
+====Exception Notification
+It's probably a good idea to override the default methods anyway to be able to add exception notifications, so you can monitor
+the rate at which TaxCloud related exceptions are occuring.
 
 
 ===NOTE

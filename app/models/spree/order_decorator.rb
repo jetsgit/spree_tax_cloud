@@ -5,7 +5,11 @@ Spree::Order.class_eval do
   has_one :tax_cloud_transaction
 
 
-  self.state_machine.after_transition :to => :payment,
+  # We do the tax lookup when transitioning from the address state
+  # so that if the address is invalid and Tax Cloud cannot determine appropriate taxes,
+  # the developer can optionally stop the transition.
+  # By stopping the transition, a user can correct their address information.
+  self.state_machine.before_transition :from => :address,
       :do => :lookup_tax_cloud,
       :if => :tax_cloud_eligible?
 
@@ -24,18 +28,30 @@ Spree::Order.class_eval do
 
   def lookup_tax_cloud
 
-    unless tax_cloud_transaction.nil?
+    begin
 
-      tax_cloud_transaction.lookup
+      if tax_cloud_transaction.present?
+        # UPDATE
+        tax_cloud_transaction.cart_items.destroy
+        tax_cloud_transaction.lookup
 
-    else
+        tax_cloud_transaction.adjustment.destroy
+        tax_cloud_adjustment
 
-      create_tax_cloud_transaction
+      else
+        # CREATE
+        create_tax_cloud_transaction
+        tax_cloud_transaction.lookup
+        tax_cloud_adjustment
 
-      tax_cloud_transaction.lookup
+      end
 
-      tax_cloud_adjustment
 
+    rescue Spree::TaxCloudLookupError => e
+      rescue_tax_cloud_lookup_error(e)
+
+    rescue => e
+      handle_unknown_lookup_error(e)
     end
 
   end
@@ -57,10 +73,19 @@ Spree::Order.class_eval do
 
   def capture_tax_cloud
 
-    return unless tax_cloud_transaction
+    begin
 
-    tax_cloud_transaction.capture
+      return unless tax_cloud_transaction
 
+      tax_cloud_transaction.capture
+
+    rescue Spree::TaxCloudCaptureError => e
+      rescue_tax_cloud_capture_error(e)
+
+
+    rescue => e
+      handle_unknown_capture_error(e)
+    end
   end
 
 
@@ -89,5 +114,34 @@ Spree::Order.class_eval do
     end
     
     promotions.map(&:amount).sum 
+  end
+
+
+  private
+
+
+  def handle_unknown_capture_error(e)
+    # By default, we allow the order to continue by returning true.
+    # Feel free to override!
+    return true
+  end
+
+
+  def handle_unknown_lookup_error(e)
+    # By default, we allow the order to continue by returning true.
+    # Feel free to override!
+    return true
+  end
+
+  def rescue_tax_cloud_lookup_error(e)
+    # By default, we allow the order to continue by returning true.
+    # Feel free to override!
+    return true
+  end 
+
+  def rescue_tax_cloud_capture_error(e)
+    # By default, show the error message to the user and prevent the
+    # Feel free to override!
+    return true
   end
 end
