@@ -5,6 +5,17 @@ require 'spree/tax_cloud/savon_xml_override'
 
 module Spree
 
+
+  class TaxCloudAPILoginMissing < Exception
+    # Used when the API login ID is not specified as a Spree preference
+  end
+
+
+  class TaxCloudAPIKeyMissing < Exception
+    # Used when the API key is not specified as a Spree preference
+  end
+
+
   class TaxCloud
 
     def lookup(tax_cloud_transaction)
@@ -54,6 +65,8 @@ module Spree
 
 
     def default_body
+      raise Spree::TaxCloudAPILoginMissing if Spree::Config.taxcloud_api_login_id.blank?$
+      raise Spree::TaxCloudAPIKeyMissing   if Spree::Config.taxcloud_api_key.blank?
       {
         'apiLoginID' => Spree::Config.taxcloud_api_login_id,
         'apiKey' => Spree::Config.taxcloud_api_key
