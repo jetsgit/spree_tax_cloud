@@ -2,26 +2,20 @@
 
 require 'savon'
 require 'spree/tax_cloud/savon_xml_override'
+require 'spree/tax_cloud/tax_cloud_exceptions'
 
 module Spree
-
-
-  class TaxCloudAPILoginMissing < Exception
-    # Used when the API login ID is not specified as a Spree preference
-  end
-
-
-  class TaxCloudAPIKeyMissing < Exception
-    # Used when the API key is not specified as a Spree preference
-  end
-
 
   class TaxCloud
 
     def lookup(tax_cloud_transaction)
-      client.request(:lookup) do
+      response = client.request(:lookup) do
         soap.body = lookup_params(tax_cloud_transaction)
       end
+
+      raise Spree::TaxCloudLookupError.new(response) if response.present? and response.body.dig(:lookup_response, :lookup_result, :response_type) ==  "Error"
+
+      response
     end
 
 
@@ -38,7 +32,7 @@ module Spree
 
     def capture(tax_cloud_transaction)
       order = tax_cloud_transaction.order
-      client.request(:authorized_with_capture) do
+      response = client.request(:authorized_with_capture) do
         soap.body = default_body.merge({ 'customerID' => order.user_id,
                                          'cartID' => order.number,
                                          'orderID' => order.number,
@@ -46,6 +40,10 @@ module Spree
                                          'dateCaptured' => DateTime.now
                                        })
       end
+
+      raise Spree::TaxCloudCaptureError.new(response) if response.present? and response.body.dig(:lookup_response, :lookup_result, :response_type) ==  "Error"
+
+      response
     end
 
 
@@ -61,11 +59,13 @@ module Spree
 
     def client
       @client ||= Savon::Client.new("https://api.taxcloud.net/1.0/?wsdl")
+      @client.config.logger = Rails.logger
+      @client
     end
 
 
     def default_body
-      raise Spree::TaxCloudAPILoginMissing if Spree::Config.taxcloud_api_login_id.blank?$
+      raise Spree::TaxCloudAPILoginMissing if Spree::Config.taxcloud_api_login_id.blank?
       raise Spree::TaxCloudAPIKeyMissing   if Spree::Config.taxcloud_api_key.blank?
       {
         'apiLoginID' => Spree::Config.taxcloud_api_login_id,

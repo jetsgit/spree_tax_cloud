@@ -5,6 +5,8 @@
 require 'spree/tax_cloud'
 require 'spree/tax_cloud/tax_cloud_cart_item'
 require_dependency 'spree/order'
+
+
 module Spree
 
   class TaxCloudTransaction < ActiveRecord::Base
@@ -36,24 +38,17 @@ module Spree
 
     def lookup
 
-      begin
+      create_cart_items
 
-        create_cart_items
+      response = tax_cloud.lookup(self)
 
-        response = tax_cloud.lookup(self)
-
-        raise 'Tax Cloud Lookup Error' unless response.success?
-
-
+      if response.nil?
+        return false
+      else
         transaction do
+          update_attribute :message, response.body.dig(:lookup_response, :lookup_result, :messages, :response_message, :message)
 
-          unless response.body[:lookup_response][:lookup_result][:messages].nil?
-            self.message = response.body[:lookup_response][:lookup_result][:messages][:response_message][:message]
-          end
-
-          self.save
-
-          response_cart_items = Array.wrap response.body[:lookup_response][:lookup_result][:cart_items_response][:cart_item_response]
+          response_cart_items = Array.wrap(response.body.dig(:lookup_response, :lookup_result, :cart_items_response, :cart_item_response))
 
           response_cart_items.each do |response_cart_item|
             cart_item = cart_items.find_by_index(response_cart_item[:cart_item_index].to_i)
@@ -61,7 +56,7 @@ module Spree
           end
 
         end #transaction
-      end #begin
+      end
     end 
 
 
