@@ -35,7 +35,7 @@ Spree::Order.class_eval do
         tax_cloud_transaction.cart_items.destroy
         tax_cloud_transaction.lookup
 
-        tax_cloud_transaction.adjustment.destroy
+        tax_cloud_transaction.adjustment.destroy if tax_cloud_transaction.adjustment
         tax_cloud_adjustment
 
       else
