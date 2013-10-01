@@ -19,7 +19,10 @@ module Spree
       rate = amount / order.item_total
       tax  = (order.item_total - order.promotions_total) * rate
       tax  = 0 if tax.nan?
-      adjustment.update_attribute_without_callbacks(:amount, tax)   unless ( adjustment.amount * 100 ).round == ( tax * 100 ).round
+      unless ( adjustment.amount * 100 ).round == ( tax * 100 ).round
+        adjustment.update_attribute_without_callbacks(:amount, tax) 
+      end
+       
     end
 
     def lookup
