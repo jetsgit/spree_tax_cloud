@@ -22,7 +22,6 @@ module Spree
       unless ( adjustment.amount * 100 ).round == ( tax * 100 ).round
         adjustment.update_attribute_without_callbacks(:amount, tax) 
       end
-       
     end
 
     def lookup
