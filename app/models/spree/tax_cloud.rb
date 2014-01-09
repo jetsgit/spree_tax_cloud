@@ -66,9 +66,8 @@ module Spree
 
 
     def default_body
-      raise TaxCloudAPILoginMissing.new if Spree::Config.taxcloud_api_login_id.blank?
-      raise TaxCloudAPIKeyMissing.new   if Spree::Config.taxcloud_api_key.blank?
-
+      raise Spree::TaxCloudAPILoginMissing if Spree::Config.taxcloud_api_login_id.blank?
+      raise Spree::TaxCloudAPIKeyMissing   if Spree::Config.taxcloud_api_key.blank?
       {
         'apiLoginID' => Spree::Config.taxcloud_api_login_id,
         'apiKey' => Spree::Config.taxcloud_api_key

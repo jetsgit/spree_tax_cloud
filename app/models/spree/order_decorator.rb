@@ -35,7 +35,7 @@ Spree::Order.class_eval do
         tax_cloud_transaction.cart_items.destroy
         tax_cloud_transaction.lookup
 
-        tax_cloud_transaction.adjustment.destroy
+	tax_cloud_transaction.adjustment.try(:destroy)
         tax_cloud_adjustment
 
       else
@@ -88,7 +88,6 @@ Spree::Order.class_eval do
 
     rescue Spree::TaxCloudCaptureError => e
       rescue_tax_cloud_capture_error(e)
-
 
     rescue => e
       handle_unknown_capture_error(e)
