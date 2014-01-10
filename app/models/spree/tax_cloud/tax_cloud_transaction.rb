@@ -24,7 +24,11 @@ module Spree
 
     def update_adjustment(adjustment, source)
 
-      tax_rate =  amount / cart_price
+      if cart_price.present? && cart_price != 0
+        tax_rate =  amount / cart_price
+      else
+        tax_rate = 0
+      end
 
       taxable = ( cart_price + order.promotions_total )
 
