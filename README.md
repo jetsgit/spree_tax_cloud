@@ -1,10 +1,12 @@
-==  Spree TaxCloud SOAP API 
+Spree TaxCloud SOAP API 
+=======================
 
 USA Tax calculation extension for Spree using Tax Cloud service .
 
 Based on the work of Chris Mar and Drew Tempelmeyer.
 
-===USAGE
+USAGE
+-----
 
 Create an account with TaxCloud:
 
@@ -16,13 +18,15 @@ Run below to install migrations:
 
     bundle exec rails g spree_tax_cloud:install
 
-===Configure in Spree Admin
+Configure in Spree Admin
+------------------------
 
 Go to configurations, then on left side of page
 will be a link for TaxCloud settings. Enter your
 login, api_id, product tic, shipping tic, and business address.
 
-===NOTE
+NOTE
+----
 
 At this time spree_tax_cloud does not handle multiple tax category tic's.
 
@@ -30,12 +34,14 @@ Capture and authorize are performed in 'capture'.
 
 Verify address is implemented for Spree 2+.
 
-===TODO
+TODO
+----
 
 Request spec to ensure integration works throughout checkout process.
 Lookup tax per shipment in order to properly lookup tax from actual stock location rather than the default.
 Integrate multiple tax categories.
 
-===COPYRIGHT
+COPYRIGHT
+---------
 
-Spree Tax Cloud Copyright (c) by Jerrold R Thompson (@jet) released under the 'new' BSD license.
+[Copyright]( http://jet.mit-license.org/ ) by Jerrold R Thompson 
