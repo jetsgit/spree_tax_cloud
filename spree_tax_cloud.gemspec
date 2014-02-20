@@ -14,10 +14,10 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 1.9.3'
 
-  s.add_dependency 'spree_api', '2.1.0'
-  s.add_dependency 'spree_backend', '2.1.0'
-  s.add_dependency 'spree_core', '2.1.0'
-  s.add_dependency 'spree_frontend', '2.1.0'
+  s.add_dependency 'spree_api'
+  s.add_dependency 'spree_backend'
+  s.add_dependency 'spree_core', '~> 2.1.0'
+  s.add_dependency 'spree_frontend'
 
   s.add_runtime_dependency 'savon', '1.2.0'
   s.add_runtime_dependency 'tax_cloud', '0.2.2'
