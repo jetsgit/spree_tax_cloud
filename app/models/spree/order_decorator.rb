@@ -57,19 +57,31 @@ Spree::Order.class_eval do
   end
 
   def tax_cloud_adjustment
+    #if Tax adjustment already exists then just update the amount
 
-    adjustments.create do |adjustment|
-      adjustment.source = self
-      adjustment.originator = tax_cloud_transaction
-      adjustment.label = 'Tax'
-      adjustment.mandatory = true
-      adjustment.eligible = true
-      adjustment.amount = tax_cloud_transaction.amount 
-   end
- end
+    begin
 
+      tax_adjustments = adjustments.where(:label => :Tax)
 
+      if tax_adjustments.present?
+        #UPDATE
+        tax_adjustments.first.amount = tax_cloud_transaction.amount
 
+      else
+        #CREATE
+        adjustments.create do |adjustment|
+          adjustment.source = self
+          adjustment.originator = tax_cloud_transaction
+          adjustment.label = 'Tax'
+          adjustment.mandatory = true
+          adjustment.eligible = true
+          adjustment.amount = tax_cloud_transaction.amount
+        end
+      end
+    rescue => e
+      handle_unknown_lookup_error(e)
+    end
+  end
 
   def capture_tax_cloud
 
@@ -81,7 +93,6 @@ Spree::Order.class_eval do
 
     rescue Spree::TaxCloudCaptureError => e
       rescue_tax_cloud_capture_error(e)
-
 
     rescue => e
       handle_unknown_capture_error(e)

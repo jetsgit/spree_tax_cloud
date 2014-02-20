@@ -24,7 +24,11 @@ module Spree
 
     def update_adjustment(adjustment, source)
 
-      tax_rate =  amount / cart_price
+      if cart_price.present? && cart_price != 0
+        tax_rate =  amount / cart_price
+      else
+        tax_rate = 0
+      end
 
       taxable = ( cart_price + order.promotions_total )
 
@@ -95,6 +99,8 @@ module Spree
 
 
     def create_cart_items
+      raise TaxCloudProductTicMissing.new unless Spree::Config.taxcloud_product_tic.present?
+      raise TaxCloudShippingTicMissing.new unless Spree::Config.taxcloud_shipping_tic.present?
       cart_items.clear
       index = 0
       order.line_items.each do |line_item|

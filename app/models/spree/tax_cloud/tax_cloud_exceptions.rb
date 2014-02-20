@@ -32,4 +32,16 @@ module Spree
     # Used when the API key is not specified as a Spree preference
   end
 
+  class TaxCloudOriginMissing < StandardError
+    # Used when the API key is not specified as a Spree preference
+  end
+
+  class TaxCloudProductTicMissing < StandardError
+    # Used when the the product tic isn't set
+  end
+
+  class TaxCloudShippingTicMissing < StandardError
+    # Used when the the shipping tic isn't set
+  end
+
 end

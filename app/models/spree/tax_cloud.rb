@@ -20,6 +20,7 @@ module Spree
 
 
     def lookup_params(tax_cloud_transaction)
+      raise Spree::TaxCloudOriginMissing.new unless Spree::Config.taxcloud_origin.present?
       order = tax_cloud_transaction.order
       default_body.merge({ 'customerID' => order.user_id || order.number,
                            'cartID' => order.number,
