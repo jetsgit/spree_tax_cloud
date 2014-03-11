@@ -97,7 +97,6 @@ module Spree
 
         def origin_address
           if JSON.parse(Spree::Config.taxcloud_origin).empty?
-            # TODO: Need to refactor entire extension to lookup tax per shipment in order to properly lookup tax from actual stock location rather than the default.
             stock_location = Spree::StockLocation.active.where("city IS NOT NULL and state_id IS NOT NULL").first
             unless stock_location
               raise 'Please ensure you have at least one Stock Location with a valid address for your tax origin.'
