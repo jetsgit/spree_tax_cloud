@@ -13,13 +13,11 @@ module Spree
 
     has_many :cart_items, :class_name => 'TaxCloudCartItem', :dependent => :destroy
 
-    # called when order updates adjustments
-
-    def update_adjustment(adjustment, source)
+    # Called by adjustment update.
+    def compute_amount(order)
       rate = amount / order.item_total
       tax  = (order.item_total - order.promotions_total) * rate
       tax  = 0 if tax.nan?
-      adjustment.update_column(:amount, tax)
     end
 
     def lookup

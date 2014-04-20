@@ -22,12 +22,11 @@ Spree::Order.class_eval do
 
   def tax_cloud_adjustment
     adjustments.create do |adjustment|
-      adjustment.source = self
-      adjustment.originator = tax_cloud_transaction
-      adjustment.label = 'Tax'
+      adjustment.source    = tax_cloud_transaction
+      adjustment.label     = 'Tax'
       adjustment.mandatory = true
-      adjustment.eligible = true
-      adjustment.amount = tax_cloud_transaction.amount
+      adjustment.eligible  = true
+      adjustment.amount    = tax_cloud_transaction.amount
     end
   end
 

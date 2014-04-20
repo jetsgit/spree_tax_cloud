@@ -7,7 +7,7 @@ describe 'Checkout', js: true do
   let!(:shipping_method) { create(:shipping_method) }
   let!(:stock_location) { create(:stock_location, country_id: country.id, state_id: state.id) }
   let!(:mug) { create(:product, :name => "RoR Mug") }
-  let!(:payment_method) { create(:payment_method) }
+  let!(:payment_method) { create(:check_payment_method) }
   let!(:zone) { create(:zone) }
 
   before do
