@@ -15,8 +15,11 @@ Spree::Order.class_eval do
       tax_cloud_transaction.lookup
     else
       create_tax_cloud_transaction
-      tax_cloud_transaction.lookup
-      tax_cloud_adjustment
+      begin
+        tax_cloud_transaction.lookup
+      ensure
+        tax_cloud_adjustment
+      end
     end
   end
 
