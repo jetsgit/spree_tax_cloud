@@ -9,18 +9,38 @@ module Spree
 
     validates :order, :presence => true
 
-    has_one :adjustment, :as => :originator
+    # has_one :adjustment, :as => :originator
+		
+		# modified for Spree 2.2
+    has_many :adjustments, :as => :source
 
     has_many :cart_items, :class_name => 'TaxCloudCartItem', :dependent => :destroy
 
     # called when order updates adjustments
 
-    def update_adjustment(adjustment, source)
-      rate = amount / order.item_total
-      tax  = (order.item_total - order.promotions_total) * rate
-      tax  = 0 if tax.nan?
-      adjustment.update_column(:amount, tax)
-    end
+		# Temp deletion: Will need to modify and make adjustment per line_item
+
+    # def update_adjustment(adjustment, source)
+    #   rate = amount / order.item_total
+    #   tax  = (order.item_total - order.promotions_total) * rate
+    #   tax  = 0 if tax.nan?
+    #   adjustment.update_column(:amount, tax)
+    # end
+
+    # def update_adjustment(adjustment, source)
+			# binding.pry
+    #   rate = amount / order.item_total
+    #   tax  = (order.item_total - order.promotions_total) * rate
+    #   tax  = 0 if tax.nan?
+    #   adjustment.update_column(:amount, tax)
+    # end
+
+
+		# def create_line_item_tax_adjustment
+		# 	order.line_items.each do |line_item|  
+
+		# 	end
+		# end
 
     def lookup
       create_cart_items

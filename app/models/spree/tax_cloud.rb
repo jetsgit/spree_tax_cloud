@@ -16,7 +16,7 @@ module Spree
             config.usps_username = nil
           end
         end
-      end
+    end
 
       def lookup(tax_cloud_transaction)
         client.request(:lookup) do
