@@ -24,7 +24,7 @@ Spree::Order.class_eval do
 		binding.pry
 		line_items.each do |line_item|
 			line_item.adjustments.create({
-				source:  self,
+				source:  self.tax_cloud_transaction,
 				label:  'Tax from TaxCloud',
 				mandatory:  true,
 				eligible:  true,
