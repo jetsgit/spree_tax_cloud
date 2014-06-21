@@ -28,7 +28,8 @@ Spree::Order.class_eval do
 				label:  'Tax from TaxCloud',
 				mandatory:  true,
 				eligible:  true,
-				amount:  line_item.tax_cloud_cart_item.amount
+				amount:  line_item.tax_cloud_cart_item.amount,
+				order_id: self.id
 			}) 
 		end
 	end
