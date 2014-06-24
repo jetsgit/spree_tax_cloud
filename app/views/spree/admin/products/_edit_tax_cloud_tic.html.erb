@@ -1,0 +1,6 @@
+<div data-hook="admin_product_form_tax_cloud_tic">
+  <%= f.field_container :tax_cloud_tic do %>
+    <%= f.label :tax_cloud_tic_id, Spree.t(:tax_cloud_tic) %>
+    <%= f.text_field :tax_cloud_tic, :size => 4, placeholder: Spree::Config.taxcloud_default_product_tic %>
+  <% end %>
+</div>

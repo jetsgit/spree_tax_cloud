@@ -21,8 +21,8 @@
       <fieldset>
         <legend><%= t('taxcloud_taxability_codes') %></legend>
         <p>
-          <label><%= t('taxcloud_product_taxability_code') %></label><br />
-          <%= text_field_tag('settings[taxcloud_product_tic]', Spree::Config.taxcloud_product_tic, :size => 46, :maxlength => 256, :class => 'tax_cloud') %>
+          <label><%= t('taxcloud_default_product_taxability_code') %></label><br />
+          <%= text_field_tag('settings[taxcloud_default_product_tic]', Spree::Config.taxcloud_default_product_tic, :size => 46, :maxlength => 256, :class => 'tax_cloud') %>
         </p>
         <p>
           <label><%= t('taxcloud_shipping_taxability_code') %></label><br />
