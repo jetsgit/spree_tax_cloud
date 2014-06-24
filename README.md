@@ -28,8 +28,6 @@ login, api_id, product tic, shipping tic, and business address.
 NOTE
 ----
 
-At this time spree_tax_cloud does not handle multiple tax category tic's.
-
 Capture and authorize are performed in 'capture'.
 
 Verify address is implemented for Spree 2+.
@@ -39,7 +37,6 @@ TODO
 
 Request spec to ensure integration works throughout checkout process.
 Lookup tax per shipment in order to properly lookup tax from actual stock location rather than the default.
-Integrate multiple tax categories.
 
 COPYRIGHT
 ---------

@@ -35,7 +35,7 @@ RSpec.configure do |config|
   config.before :suite do
     Spree::Config[:taxcloud_api_login_id] = '395D0F00'
     Spree::Config[:taxcloud_api_key]      = 'E191A9C3-75AD-49A5-917E-171E0C9CD396'
-    Spree::Config[:taxcloud_product_tic]  = '00000'
+    Spree::Config[:taxcloud_default_product_tic]  = '00000'
     Spree::Config[:taxcloud_shipping_tic] = '11010'
   end
 
