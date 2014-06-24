@@ -7,7 +7,7 @@ en:
     taxcloud_api_login_and_key: TaxCloud API Login and Key
     taxcloud_api_login_id: TaxCloud API Login ID
     taxcloud_api_key: TaxCloud API Key
-    taxcloud_product_taxability_code: TaxCloud Product Taxability Code
+    taxcloud_default_product_taxability_code: TaxCloud Default Product Taxability Code
     taxcloud_shipping_taxability_code: TaxCloud Shipping Taxability Code
     usps_user: USPS User ID
     usps_user_id: USPS API User ID
