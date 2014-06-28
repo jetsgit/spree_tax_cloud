@@ -52,6 +52,41 @@ module Spree
       zip5:       address.zipcode[0...5]
       )
     end
+    def self.cart_item_from_item(item, index)
+      if item.class.to_s == "Spree::LineItem"
+        line_item = item
+        ::TaxCloud::CartItem.new(
+        index:      index,
+        item_id:    line_item.try(:variant).try(:sku) || "LineItem " + line_item.id.to_s,
+        tic:        line_item.product.tax_cloud_tic,
+        price:      line_item.price,
+        quantity:   line_item.quantity
+        )
+
+      elsif item.class.to_s == "Spree::Shipment"
+        shipment = item
+        ::TaxCloud::CartItem.new(
+        index:      index,
+        item_id:    "Shipment " + shipment.number,
+        tic:        Spree::Config.taxcloud_shipping_tic,
+        price:      shipment.cost,
+        quantity:   1
+        )
+
+      else
+        raise 'TaxCloud::CartItem cannot be made from this item.'
+      end
+    end
+      
+    def self.shipping_item_from_order(order, index)
+      ::TaxCloud::CartItem.new(
+      index:      index,
+      item_id:    "SHIPPING",
+      tic:        Spree::Config.taxcloud_shipping_tic,
+      price:      order.ship_total,
+      quantity:   1
+      )
+    end    
 
 
     def lookup
