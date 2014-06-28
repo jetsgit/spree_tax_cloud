@@ -1,6 +1,6 @@
 # Interface to the Tax Cloud SOAP API
 
-require 'savon'
+# require 'savon'
 # require 'spree/tax_cloud/savon_xml_override'
 
 module Spree
