@@ -44,7 +44,23 @@ Spree::Order.class_eval do
 	def update_with_taxcloudlookup 
 		unless tax_cloud_transaction.nil?
 
-			tax_cloud_transaction.lookup 
+			# tax_cloud_transaction.lookup 
+			transaction = Spree::TaxCloudTransaction.transaction_from_order(self)
+			response = transaction.lookup
+      unless response.blank?
+				binding.pry
+          if response.body[:lookup_response][:lookup_result][:cart_items_response].blank?
+            raise ::SpreeTaxCloud::Error, response.body[:lookup_response][:lookup_result][:messages][:response_message][:message]
+          end
+          response_cart_items = Array.wrap response.body[:lookup_response][:lookup_result][:cart_items_response][:cart_item_response]
+          response_cart_items.each do |response_cart_item|
+            cart_item = cart_items.find_by_index(response_cart_item[:cart_item_index].to_i)
+            cart_item.update_attribute(:amount, response_cart_item[:tax_amount].to_f)
+          end
+      else
+        raise ::SpreeTaxCloud::Error, 'TaxCloud response unsuccessful!'
+      end
+			 
 
 		end
 
