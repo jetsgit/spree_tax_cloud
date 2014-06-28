@@ -17,27 +17,6 @@ module Spree
 				end
 			end
 		end
-		def self.transaction_from_order(order)
-			stock_location = Spree::StockLocation.active.where("city IS NOT NULL and state_id IS NOT NULL").first
-			unless stock_location
-				raise 'Please ensure you have at least one Stock Location with a valid address for your tax origin.'
-			end
-
-			transaction = ::TaxCloud::Transaction.new(
-				customer_id: order.user_id || order.email,
-				order_id: order.number,
-				cart_id: order.number,
-				origin: address_from_spree_address(stock_location),
-				destination: address_from_spree_address(order.ship_address)
-			)
-
-			index = -1 # array is zero-indexed
-			# Prepare line_items for lookup
-			order.line_items.each { |line_item| transaction.cart_items << cart_item_from_item(line_item, index += 1) }
-			transaction.cart_items << shipping_item_from_order(order, index += 1)
-
-			return transaction
-		end
 
 
 		def lookup(tax_cloud_transaction)

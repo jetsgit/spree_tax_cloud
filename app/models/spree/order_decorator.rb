@@ -15,7 +15,8 @@ Spree::Order.class_eval do
 			tax_cloud_transaction.lookup
 		else
 			create_tax_cloud_transaction
-			tax_cloud_transaction.lookup
+			transaction = Spree::TaxCloudTransaction.transaction_from_order(self)
+			transaction.lookup
 			tax_cloud_adjustment
 		end
 	end
