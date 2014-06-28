@@ -43,6 +43,15 @@ module Spree
 
 			return transaction
 		end
+    def self.address_from_spree_address(address)
+      ::TaxCloud::Address.new(
+      address1:   address.address1,
+      address2:   address.address2,
+      city:       address.city,
+      state:      address.try(:state).try(:abbr), # replace with state_text if possible
+      zip5:       address.zipcode[0...5]
+      )
+    end
 
 
     def lookup
