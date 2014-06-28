@@ -11,14 +11,10 @@ Spree::Order.class_eval do
 	end
 
 	def lookup_tax_cloud
-		unless tax_cloud_transaction.nil?
-			tax_cloud_transaction.lookup
-		else
+		if tax_cloud_transaction.nil?
 			create_tax_cloud_transaction
-			transaction = Spree::TaxCloudTransaction.transaction_from_order(self)
-			transaction.lookup
-			tax_cloud_adjustment
 		end
+		update_with_taxcloudlookup
 	end
 
 	def tax_cloud_adjustment
@@ -47,10 +43,10 @@ Spree::Order.class_eval do
 			response = transaction.lookup
 			unless response.blank?
 				response_cart_items = response.cart_items
-				binding.pry
 				index = -1
 				self.line_items.each do |line_item|
-					line_item.additional_tax_total = response_cart_items[index += 1].tax_amount
+					line_item.additional_tax_total = round_to_two_places( response_cart_items[index += 1].tax_amount )
+					binding.pry
 				end
 			else
 				raise ::SpreeTaxCloud::Error, 'TaxCloud response unsuccessful!'
@@ -63,4 +59,7 @@ Spree::Order.class_eval do
 	alias_method :update_without_taxcloud_lookup, :update! 
 	alias_method :update!, :update_with_taxcloudlookup 
 
+	def round_to_two_places(amount)
+		BigDecimal.new(amount.to_s).round(2, BigDecimal::ROUND_HALF_UP)
 	end
+end
