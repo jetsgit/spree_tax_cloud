@@ -1,5 +1,3 @@
-# Designed to be the Originator for an Adjustment on an order.
-
 require_dependency 'spree/order'
 
 module Spree
@@ -69,7 +67,7 @@ module Spree
         raise 'TaxCloud::CartItem cannot be made from this item.'
       end
     end
-      
+
     def self.shipping_item_from_order(order, index)
       ::TaxCloud::CartItem.new(
       index:      index,
@@ -79,57 +77,5 @@ module Spree
       quantity:   1
       )
     end    
-
-    # def capture
-    #   tax_cloud.capture(self)
-    # end
-
-    # def amount
-    #   cart_items.map(&:amount).sum
-    # end
-
-    # private
-		
-		#  BELOW DEPRECATED
-
-    # def cart_price
-    #   total = 0
-    #   cart_items.each do |item|
-
-    #     total += ( item.price * item.quantity )
-    #   end
-    #   total
-    # end
-
-		################################################################################
-	
-    # def tax_cloud
-    #   @tax_cloud ||= Spree::TaxCloud.new
-    # end
-		################################################################################
-    # def create_cart_items
-    #   cart_items.clear
-    #   index = 0
-    #   order.line_items.each do |line_item|
-    #     cart_items.create!({
-    #       :index => (index += 1),
-    #       :tic => line_item.product.tax_cloud_tic,
-    #       :sku => line_item.variant.sku.presence || line_item.variant.id,
-    #       :quantity => line_item.quantity,
-    #       :price => line_item.price.to_f,
-    #       :line_item => line_item
-    #     })
-    #   end
-
-    #   cart_items.create!({
-    #     :index => (index += 1),
-    #     :tic =>  Spree::Config.taxcloud_shipping_tic,
-    #     :sku => 'SHIPPING',
-    #     :quantity => 1,
-    #     :price => order.ship_total.to_f
-    #   })
-    #   
-    # end
-
   end
 end

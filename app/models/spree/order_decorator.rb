@@ -31,13 +31,6 @@ Spree::Order.class_eval do
 		end
 	end
 
-	# THIS SHOULD GO AWAY!
-	#
-	# def promotions_total
-	# 	adjustments.eligible.promotion.map(&:amount).sum.abs
-	# end
-	
-
 	def capture_and_authorize_tax_cloud
 		return unless tax_cloud_transaction
 		transaction = Spree::TaxCloud.transaction_from_order(self)
@@ -67,34 +60,6 @@ Spree::Order.class_eval do
 
 	alias_method :update_without_taxcloud_lookup, :update! 
 	alias_method :update!, :update_with_taxcloudlookup 
-
-	def finalize!
-		# lock all adjustments (coupon promotions, etc.)
-		all_adjustments.each{|a| a.close}
-
-		# tell TaxCloud to consider this order completed
-		# TODO there is surely a cleaner way to set this hook
-		transaction = Spree::TaxCloud.transaction_from_order(self)
-		transaction.authorized_with_capture
-
-		# update payment and shipment(s) states, and save
-		updater.update_payment_state
-		shipments.each do |shipment|
-			shipment.update!(self)
-			shipment.finalize!
-		end
-
-		updater.update_shipment_state
-		save
-		updater.run_hooks
-
-		touch :completed_at
-
-		deliver_order_confirmation_email unless confirmation_delivered?
-
-		consider_risk
-	end
-
 
 	def round_to_two_places(amount)
 		BigDecimal.new(amount.to_s).round(2, BigDecimal::ROUND_HALF_UP)

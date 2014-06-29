@@ -10,6 +10,4 @@ Spree::AppConfiguration.class_eval do
     config.api_key = Spree::Config.taxcloud_api_key
     config.usps_username = Spree::Config.taxcloud_usps_user_id
   end
-  
-  # Rails.application.config.spree.calculators.tax_rates << Spree::Calculator::TaxCloudCalculator
 end
