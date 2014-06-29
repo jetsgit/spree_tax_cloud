@@ -89,15 +89,17 @@ module Spree
     end
 
     private
+		
+		#  BELOW DEPRECATED
 
-    def cart_price
-      total = 0
-      cart_items.each do |item|
+    # def cart_price
+    #   total = 0
+    #   cart_items.each do |item|
 
-        total += ( item.price * item.quantity )
-      end
-      total
-    end
+    #     total += ( item.price * item.quantity )
+    #   end
+    #   total
+    # end
 
     def tax_cloud
       @tax_cloud ||= Spree::TaxCloud.new
