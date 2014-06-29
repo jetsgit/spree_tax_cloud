@@ -13,15 +13,6 @@ module Spree
 
     has_many :cart_items, :class_name => 'TaxCloudCartItem', :dependent => :destroy
 
-    # called when order updates adjustments
-
-    # def update_adjustment(adjustment, source)
-    #   rate = amount / order.item_total
-    #   tax  = (order.item_total - order.promotions_total) * rate
-    #   tax  = 0 if tax.nan?
-    #   adjustment.update_column(:amount, tax)
-    # end
-
 		def self.transaction_from_order(order)
 			stock_location = Spree::StockLocation.active.where("city IS NOT NULL and state_id IS NOT NULL").first
 			unless stock_location
@@ -43,6 +34,7 @@ module Spree
 
 			return transaction
 		end
+
     def self.address_from_spree_address(address)
       ::TaxCloud::Address.new(
       address1:   address.address1,
@@ -87,26 +79,6 @@ module Spree
       quantity:   1
       )
     end    
-
-
-    # def lookup
-    #   create_cart_items
-    #   response = tax_cloud.lookup(self)
-    #   if response.success?
-    #     transaction do
-    #       if response.body[:lookup_response][:lookup_result][:cart_items_response].blank?
-    #         raise ::SpreeTaxCloud::Error, response.body[:lookup_response][:lookup_result][:messages][:response_message][:message]
-    #       end
-    #       response_cart_items = Array.wrap response.body[:lookup_response][:lookup_result][:cart_items_response][:cart_item_response]
-    #       response_cart_items.each do |response_cart_item|
-    #         cart_item = cart_items.find_by_index(response_cart_item[:cart_item_index].to_i)
-    #         cart_item.update_attribute(:amount, response_cart_item[:tax_amount].to_f)
-    #       end
-    #     end
-    #   else
-    #     raise ::SpreeTaxCloud::Error, 'TaxCloud response unsuccessful!'
-    #   end
-    # end
 
     def capture
       tax_cloud.capture(self)

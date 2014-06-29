@@ -18,17 +18,16 @@ Spree::Order.class_eval do
 	end
 
 	def tax_cloud_adjustment(tax)
-		unless ( old_adj = adjustments.where("order_id = ? and  source_type = ?, self.id, tax_cloud_transaction)" )).blank? 
-			old_adj.destroy
-		else
-			adjustments.create do |adjustment|
-				adjustment.source = tax_cloud_transaction
-				adjustment.label = 'Tax'
-				adjustment.mandatory = true
-				adjustment.eligible = true
-				adjustment.amount = tax
-				adjustment.order_id = self.id
-			end
+		unless ( old_adj = adjustments.select(:id).where("order_id = ? and  source_type = ?", self.id, 'Spree::TaxCloudTransaction' )).blank? 
+			Spree::Adjustment.destroy( old_adj )
+		end
+		adjustments.create do |adjustment|
+			adjustment.source = tax_cloud_transaction
+			adjustment.label = 'Tax'
+			adjustment.mandatory = true
+			adjustment.eligible = true
+			adjustment.amount = tax
+			adjustment.order_id = self.id
 		end
 	end
 
@@ -42,25 +41,24 @@ Spree::Order.class_eval do
 	end
 
 	def update_with_taxcloudlookup 
-		update_without_taxcloud_lookup 
 		unless tax_cloud_transaction.nil?
+			total_tax = 0.0 
 			transaction = Spree::TaxCloudTransaction.transaction_from_order(self)
 			response = transaction.lookup
 			unless response.blank?
 				response_cart_items = response.cart_items
 				index = -1
-				total_tax = 0.0 
 				self.line_items.each do |line_item|
 					tax = round_to_two_places( response_cart_items[index += 1].tax_amount ) 
 					line_item.additional_tax_total = tax
 					total_tax += tax
-					binding.pry
 				end
 				tax_cloud_adjustment(total_tax)
 			else
 				raise ::SpreeTaxCloud::Error, 'TaxCloud response unsuccessful!'
 			end
 		end
+		update_without_taxcloud_lookup 
 	end
 
 	alias_method :update_without_taxcloud_lookup, :update! 
@@ -69,4 +67,5 @@ Spree::Order.class_eval do
 	def round_to_two_places(amount)
 		BigDecimal.new(amount.to_s).round(2, BigDecimal::ROUND_HALF_UP)
 	end
+
 end
