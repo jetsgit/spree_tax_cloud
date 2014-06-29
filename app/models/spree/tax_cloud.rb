@@ -6,67 +6,67 @@
 module Spree
 	class TaxCloud
 
-		def initialize
-			::TaxCloud.configure do |config|
-				config.api_login_id = Spree::Config.taxcloud_api_login_id
-				config.api_key = Spree::Config.taxcloud_api_key
-				if Spree::Config.taxcloud_usps_user_id
-					config.usps_username = Spree::Config.taxcloud_usps_user_id
-				else
-					config.usps_username = nil
-				end
-			end
-		end
+		# def initialize
+		# 	::TaxCloud.configure do |config|
+		# 		config.api_login_id = Spree::Config.taxcloud_api_login_id
+		# 		config.api_key = Spree::Config.taxcloud_api_key
+		# 		if Spree::Config.taxcloud_usps_user_id
+		# 			config.usps_username = Spree::Config.taxcloud_usps_user_id
+		# 		else
+		# 			config.usps_username = nil
+		# 		end
+		# 	end
+		# end
 
 
-		def lookup(tax_cloud_transaction)
-			client.request(:lookup) do
-				soap.body = lookup_params(tax_cloud_transaction)
-			end
-		end
+		# def lookup(tax_cloud_transaction)
+		# 	client.request(:lookup) do
+		# 		soap.body = lookup_params(tax_cloud_transaction)
+		# 	end
+		# end
 
-		def lookup_params(tax_cloud_transaction)
-			order = tax_cloud_transaction.order
-			default_body.merge({ 'customerID' => order.user_id || order.number,
-												 'cartID' => order.number,
-												 'cartItems' => {'CartItem' => tax_cloud_transaction.cart_items.map(&:to_hash)},
-												 'origin' => origin_address,
-												 'destination' => destination_address(order.ship_address)
-			})
-		end
+		# def lookup_params(tax_cloud_transaction)
+		# 	order = tax_cloud_transaction.order
+		# 	default_body.merge({ 'customerID' => order.user_id || order.number,
+		# 										 'cartID' => order.number,
+		# 										 'cartItems' => {'CartItem' => tax_cloud_transaction.cart_items.map(&:to_hash)},
+		# 										 'origin' => origin_address,
+		# 										 'destination' => destination_address(order.ship_address)
+		# 	})
+		# end
 
-		def capture(tax_cloud_transaction)
-			order = tax_cloud_transaction.order
-			client.request(:authorized_with_capture) do
-				soap.body = default_body.merge({
-					'customerID' => order.user_id,
-					'cartID' => order.number,
-					'orderID' => order.number,
-					'dateAuthorized' => DateTime.now,
-					'dateCaptured' => DateTime.now
-				})
-			end
-		end
+		# def capture(tax_cloud_transaction)
+		# 	order = tax_cloud_transaction.order
+		# 	client.request(:authorized_with_capture) do
+		# 		soap.body = default_body.merge({
+		# 			'customerID' => order.user_id,
+		# 			'cartID' => order.number,
+		# 			'orderID' => order.number,
+		# 			'dateAuthorized' => DateTime.now,
+		# 			'dateCaptured' => DateTime.now
+		# 		})
+		# 	end
+		# end
 
-		def ping
-			client.request(:ping) do
-				soap.body = default_body
-			end
-		end
+		# def ping
+		# 	client.request(:ping) do
+		# 		soap.body = default_body
+		# 	end
+		# end
 
-		private
+		# private
 
-		def client
-			@@client ||= Savon::Client.new('https://api.taxcloud.net/1.0/?wsdl')
-		end
+		# def client
+		# 	@@client ||= Savon::Client.new('https://api.taxcloud.net/1.0/?wsdl')
+		# end
 
-		def default_body
-			{
-				'apiLoginID' => Spree::Config.taxcloud_api_login_id,
-				'apiKey'     => Spree::Config.taxcloud_api_key,
-				'uspsUserID' => Spree::Config.taxcloud_usps_user_id
-			}
-		end
+		# def default_body
+		# 	{
+		# 		'apiLoginID' => Spree::Config.taxcloud_api_login_id,
+		# 		'apiKey'     => Spree::Config.taxcloud_api_key,
+		# 		'uspsUserID' => Spree::Config.taxcloud_usps_user_id
+		# 	}
+		# end
 
 		def cart_items(line_items)
 			line_items.map do |line_item|
