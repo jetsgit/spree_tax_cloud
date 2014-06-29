@@ -32,7 +32,6 @@ Spree::Order.class_eval do
 	end
 
 	def capture_and_authorize_tax_cloud
-		return unless tax_cloud_transaction
 		transaction = Spree::TaxCloud.transaction_from_order(self)
     transaction.authorized_with_capture 
 	end
