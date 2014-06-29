@@ -4,7 +4,7 @@ Spree::Order.class_eval do
 
 	self.state_machine.after_transition :to => :payment, :do => :lookup_tax_cloud, :if => :tax_cloud_eligible?
 
-	self.state_machine.after_transition :to => :complete, :do => :capture_tax_cloud, :if => :tax_cloud_eligible?
+	self.state_machine.after_transition :to => :complete, :do => :capture_and_authorize_tax_cloud, :if => :tax_cloud_eligible?
 
 	def tax_cloud_eligible?
 		ship_address.try(:state_id?)
@@ -36,10 +36,12 @@ Spree::Order.class_eval do
 	# def promotions_total
 	# 	adjustments.eligible.promotion.map(&:amount).sum.abs
 	# end
+	
 
-	def capture_tax_cloud
+	def capture_and_authorize_tax_cloud
 		return unless tax_cloud_transaction
-		tax_cloud_transaction.capture
+		transaction = Spree::TaxCloud.transaction_from_order(self)
+    transaction.authorized_with_capture 
 	end
 
 	def update_with_taxcloudlookup 
