@@ -68,52 +68,52 @@ module Spree
 		# 	}
 		# end
 
-		def cart_items(line_items)
-			line_items.map do |line_item|
-				{
-					'CartItem' => {
-					'Index' => index,
-					'ItemID' => line_item.variant_id,
-					'Price' => line_item.price.to_f.to_s,
-					'Qty' => line_item.quantity
-				}
-				}
-			end
-		end
+		# def cart_items(line_items)
+		# 	line_items.map do |line_item|
+		# 		{
+		# 			'CartItem' => {
+		# 			'Index' => index,
+		# 			'ItemID' => line_item.variant_id,
+		# 			'Price' => line_item.price.to_f.to_s,
+		# 			'Qty' => line_item.quantity
+		# 		}
+		# 		}
+		# 	end
+		# end
 
-		def destination_address(address)
-			address = ::TaxCloud::Address.new({
-				:address1 => address.address1,
-				:address2 => address.address2,
-				:city     => address.city,
-				:state    => address.state.abbr,
-				:zip5     => address.zipcode[0..4]
-			})
-			# Only attempt to verify address if user has configured their USPS account.
-			if Spree::Config.taxcloud_usps_user_id.present?
-				address = address.verify
-			end
-			address.to_hash
-		end
+		# def destination_address(address)
+		# 	address = ::TaxCloud::Address.new({
+		# 		:address1 => address.address1,
+		# 		:address2 => address.address2,
+		# 		:city     => address.city,
+		# 		:state    => address.state.abbr,
+		# 		:zip5     => address.zipcode[0..4]
+		# 	})
+		# 	# Only attempt to verify address if user has configured their USPS account.
+		# 	if Spree::Config.taxcloud_usps_user_id.present?
+		# 		address = address.verify
+		# 	end
+		# 	address.to_hash
+		# end
 
-		def origin_address
-			if JSON.parse(Spree::Config.taxcloud_origin).empty?
-				# TODO: Need to refactor entire extension to lookup tax per shipment in order to properly lookup tax from actual stock location rather than the default.
-				stock_location = Spree::StockLocation.active.where("city IS NOT NULL and state_id IS NOT NULL").first
-				unless stock_location
-					raise 'Please ensure you have at least one Stock Location with a valid address for your tax origin.'
-				end
-				{
-					'Address1' => stock_location.address1,
-					'Address2' => stock_location.address2,
-					'City'     => stock_location.city,
-					'State'    => stock_location.state.abbr,
-					'Zip5'     => stock_location.zipcode[0..4]
-				}
-			else
-				JSON.parse Spree::Config.taxcloud_origin
-			end
-		end
+		# def origin_address
+		# 	if JSON.parse(Spree::Config.taxcloud_origin).empty?
+		# 		# TODO: Need to refactor entire extension to lookup tax per shipment in order to properly lookup tax from actual stock location rather than the default.
+		# 		stock_location = Spree::StockLocation.active.where("city IS NOT NULL and state_id IS NOT NULL").first
+		# 		unless stock_location
+		# 			raise 'Please ensure you have at least one Stock Location with a valid address for your tax origin.'
+		# 		end
+		# 		{
+		# 			'Address1' => stock_location.address1,
+		# 			'Address2' => stock_location.address2,
+		# 			'City'     => stock_location.city,
+		# 			'State'    => stock_location.state.abbr,
+		# 			'Zip5'     => stock_location.zipcode[0..4]
+		# 		}
+		# 	else
+		# 		JSON.parse Spree::Config.taxcloud_origin
+		# 	end
+		# end
 
 		def preference_cache_key(name)
 			[self.class.name, name].join('::').underscore
