@@ -25,7 +25,12 @@ module Spree
 
 			index = -1 # array is zero-indexed
 			# Prepare line_items for lookup
-			order.line_items.each { |line_item| transaction.cart_items << cart_item_from_item(line_item, index += 1) }
+			if __method__ == :fire
+				line_items = []
+				line_items.each { |line_item| transaction.cart_items << cart_item_from_item(line_item, index += 1) }
+			else
+				order.line_items.each { |line_item| transaction.cart_items << cart_item_from_item(line_item, index += 1) }
+			end
 			transaction.cart_items << shipping_item_from_order(order, index += 1)
 
 			return transaction

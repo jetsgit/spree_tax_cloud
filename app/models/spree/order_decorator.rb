@@ -32,7 +32,7 @@ Spree::Order.class_eval do
 	end
 
 	def capture_and_authorize_tax_cloud
-		transaction = Spree::TaxCloud.transaction_from_order(self)
+		transaction = Spree::TaxCloudTransaction.transaction_from_order(self)
     transaction.authorized_with_capture 
 	end
 
@@ -59,6 +59,8 @@ Spree::Order.class_eval do
 
 	alias_method :update_without_taxcloud_lookup, :update! 
 	alias_method :update!, :update_with_taxcloudlookup 
+
+	private
 
 	def round_to_two_places(amount)
 		BigDecimal.new(amount.to_s).round(2, BigDecimal::ROUND_HALF_UP)
