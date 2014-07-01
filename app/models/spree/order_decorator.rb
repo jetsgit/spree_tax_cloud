@@ -19,7 +19,8 @@ Spree::Order.class_eval do
 
 	def tax_cloud_adjustment(tax)
 		unless ( old_adj = adjustments.select(:id).where("order_id = ? and  source_type = ?", self.id, 'Spree::TaxCloudTransaction' )).blank? 
-			Spree::Adjustment.destroy( old_adj )
+			binding.pry
+			# Spree::Adjustment.destroy( old_adj )
 		end
 		adjustments.create do |adjustment|
 			adjustment.source = tax_cloud_transaction
@@ -46,7 +47,8 @@ Spree::Order.class_eval do
 				index = -1
 				self.line_items.each do |line_item|
 					tax = round_to_two_places( response_cart_items[index += 1].tax_amount ) 
-					line_item.additional_tax_total = tax
+					Spree::LineItem.update( line_item.id, additional_tax_total: tax )
+					binding.pry
 					total_tax += tax
 				end
 				tax_cloud_adjustment(total_tax)
