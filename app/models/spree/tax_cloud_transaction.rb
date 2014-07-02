@@ -9,6 +9,8 @@ module Spree
 
     has_one :adjustment, :as => :originator
 
+    has_many :cart_items, :class_name => 'TaxCloudCartItem', :dependent => :destroy
+
 		def self.transaction_from_order(order)
 			stock_location = Spree::StockLocation.active.where("city IS NOT NULL and state_id IS NOT NULL").first
 			unless stock_location
@@ -23,14 +25,8 @@ module Spree
 				destination: address_from_spree_address(order.ship_address)
 			)
 
-			index = -1 # array is zero-indexed
-			# Prepare line_items for lookup
-			if __method__ == :fire
-				line_items = []
-				line_items.each { |line_item| transaction.cart_items << cart_item_from_item(line_item, index += 1) }
-			else
-				order.line_items.each { |line_item| transaction.cart_items << cart_item_from_item(line_item, index += 1) }
-			end
+			index = -1 
+			order.line_items.each { |line_item| transaction.cart_items << cart_item_from_item(line_item, index += 1) }
 			transaction.cart_items << shipping_item_from_order(order, index += 1)
 
 			return transaction

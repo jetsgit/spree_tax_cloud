@@ -4,7 +4,7 @@ Spree::LineItem.class_eval do
 
   def update_adjustments
     if quantity_changed?
-      # update_tax_charge # Called to ensure pre_tax_amount is updated.
+      # update_tax_charge. Called to ensure pre_tax_amount is updated.
       # recalculate_adjustments
       unless self.order.tax_cloud_transaction.nil?
         total_tax = 0.0 
