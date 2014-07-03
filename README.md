@@ -3,7 +3,9 @@ Spree TaxCloud SOAP API
 
 USA Tax calculation extension for Spree using Tax Cloud service .
 
-Based on the work of Chris Mar and Drew Tempelmeyer.
+Based on the work of Chris Mar and others.
+Version ~> 2.2.0 Now has dependency on Drew Templemeyer's TaxCloud,
+and supports TIC's per product.
 
 USAGE
 -----

@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
   s.version     =  version
   s.authors     = ["Jerrold Thompson"]
   s.email       = 'jet@whidbey.com'
-  s.homepage    = 'https://github.com/bluehandtalking/spree_tax_cloud.git'
-  s.summary     = 'Spree extension  providing Tax Cloud services'
+  s.homepage    = 'https://github.com/jetsgit/spree_tax_cloud.git'
+  s.summary     = 'Spree 2.2.x extension  providing Tax Cloud services'
   s.description = 'Spree extension for providing Tax Cloud services in USA.'
 
   s.required_ruby_version = '>= 1.9.3'
@@ -19,10 +19,11 @@ Gem::Specification.new do |s|
   s.add_dependency 'spree_core', '~> 2.2.0'
   s.add_dependency 'spree_frontend'
 
-  s.add_runtime_dependency 'savon', '1.2.0'
-  s.add_runtime_dependency 'tax_cloud', '0.2.2'
+  s.add_runtime_dependency 'tax_cloud', '0.3.0'
 
-  s.add_development_dependency 'capybara',           '~> 2.1'
+  # Required to test Honeybadger alerting
+  s.add_development_dependency 'honeybadger'
+  s.add_development_dependency 'capybara',           '~> 1.1'
   s.add_development_dependency 'coffee-rails'
   s.add_development_dependency 'database_cleaner'
   s.add_development_dependency 'factory_girl_rails', '~> 4.2'
