@@ -13,3 +13,7 @@ en:
     usps_user: USPS User ID
     usps_user_id: USPS API User ID
     zip_plus_4: Zip +4
+    spree:
+        cloudtax_description: No Op TaxCloud Calculator
+        cloudtax_label: Cloud Tax  
+

@@ -33,7 +33,7 @@ Spree::Order.class_eval do
   ##
   # Compute  taxcloud, but do not save 
   def tax_cloud_compute_tax
-     SpreeAvatax::TaxComputer.new(self).compute
+     SpreeTaxCloud::TaxComputer.new(self).compute
   end
 
 #########################################################################

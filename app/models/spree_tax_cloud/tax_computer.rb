@@ -1,5 +1,5 @@
 class SpreeTaxCloud::TaxComputer
-  DEFAULT_STATUS_FIELD = :tax_cloud_response_at
+  # DEFAULT_STATUS_FIELD = :tax_cloud_response_at
   DEFAULT_TAX_AMOUNT = 0.0
 
   class MissingTaxAmountError < StandardError; end
@@ -7,7 +7,6 @@ class SpreeTaxCloud::TaxComputer
   attr_reader :order, :doc_type, :status_field
 
   def initialize(order, options = {})
-    @status_field = options[:status_field] || DEFAULT_STATUS_FIELD
 
     @order = order
   end
@@ -34,7 +33,7 @@ class SpreeTaxCloud::TaxComputer
           :adjustable => line_item,
           :amount => tax_amount,
           :order => @order,
-          :label => Spree.t(:tax_cloud_label),
+          :label => Spree.t(:cloudtax_label),
           :included => false, # true for VAT
           :source => Spree::TaxRate.tax_cloud_single_rate,
           :state => 'closed', # this tells spree not to automatically recalculate tax_cloud tax adjustments
@@ -48,10 +47,10 @@ class SpreeTaxCloud::TaxComputer
      
 
     Spree::OrderUpdater.new(order).update
-    order[status_field] = Time.now
+    # order[status_field] = Time.now
     order.save!
-  rescue TaxCloud::ApiError, TaxCloud::TimeoutError, TaxCloud::Error => e
-    handle_avalara_error(e)
+  rescue SpreeTaxCloud::Error => e
+    handle_spree_tax_cloud_error(e)
   end
 
   ##
