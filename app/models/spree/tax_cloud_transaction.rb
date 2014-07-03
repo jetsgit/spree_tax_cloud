@@ -7,9 +7,9 @@ module Spree
 
     validates :order, :presence => true
 
-    has_one :adjustment, :as => :originator
+    # has_one :adjustment, :as => :originator
 
-    has_many :cart_items, :class_name => 'TaxCloudCartItem', :dependent => :destroy
+    # has_many :cart_items, :class_name => 'TaxCloudCartItem', :dependent => :destroy
 
 		def self.transaction_from_order(order)
 			stock_location = Spree::StockLocation.active.where("city IS NOT NULL and state_id IS NOT NULL").first
