@@ -8,13 +8,12 @@ Spree::TaxRate.class_eval do
       [tax_cloud_single_rate]
     end
 
+    # This should never be called. 
     def adjust(order, items)
-      # Stub. Taken care of with hooks elsewhere 
     end
 
+    # This should never be called. 
     def store_pre_tax_amount
-      # Stub, this is only for "included" which is not supported.
-      # This should never be called. 
     end
 
     # Require exactly one tax rate. 
@@ -30,12 +29,11 @@ Spree::TaxRate.class_eval do
   end
 
   def adjust(order, item)
-    # We've overridden the class-level TaxRate.adjust so nothing should be calling this code
     raise SpreeTaxCloud::TaxRateInvalidOperation.new("Spree::TaxRate#adjust should never be called when TaxCloud is present")
   end
 
+  # This should never be called
   def compute_amount(item)
-    # TaxCloud tax adjustments should always be in a closed state so Spree should never attempt to call this code
     raise SpreeTaxCloud::TaxRateInvalidOperation.new("Spree::TaxRate#compute_amount should never be called when TaxCloud is present")
   end
 
