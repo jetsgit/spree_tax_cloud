@@ -1,12 +1,12 @@
 class SpreeTaxCloud::TaxComputer
 
   DEFAULT_TAX_AMOUNT = 0.0
-  DEFAULT_STATUS_FIELD = :taxcloud_response_at
+  DEFAULT_STATUS_FIELD = :tax_cloud_response_at
 
 
   class MissingTaxAmountError < StandardError; end
 
-  attr_reader :order, :doc_type, :status_field
+  attr_reader :order, :status_field
 
   def initialize(order, options = {})
     @status_field = options[:status_field] || DEFAULT_STATUS_FIELD
