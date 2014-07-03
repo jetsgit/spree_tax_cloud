@@ -28,7 +28,7 @@ class SpreeTaxCloud::TaxComputer
         tax_amount = round_to_two_places( response_cart_items[index += 1].tax_amount )
         raise MissingTaxAmountError if tax_amount.nil?
 
-        line_item.update_column(:pre_tax_amount, line_item.discounted_amount)
+        # line_item.update_column(:pre_tax_amount, line_item.discounted_amount)
 
         line_item.adjustments.tax.create!({
           :adjustable => line_item,
