@@ -1,12 +1,15 @@
 class SpreeTaxCloud::TaxComputer
 
   DEFAULT_TAX_AMOUNT = 0.0
+  DEFAULT_STATUS_FIELD = :taxcloud_response_at
+
 
   class MissingTaxAmountError < StandardError; end
 
   attr_reader :order, :doc_type, :status_field
 
   def initialize(order, options = {})
+    @status_field = options[:status_field] || DEFAULT_STATUS_FIELD
     @order = order
   end
 
@@ -45,7 +48,7 @@ class SpreeTaxCloud::TaxComputer
      
 
     Spree::OrderUpdater.new(order).update
-    # order[status_field] = Time.now
+    order[status_field] = Time.now
     order.save!
   rescue SpreeTaxCloud::Error => e
     handle_spree_tax_cloud_error(e)
