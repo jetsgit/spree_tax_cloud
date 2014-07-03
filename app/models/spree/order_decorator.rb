@@ -22,21 +22,12 @@ Spree::Order.class_eval do
     transaction.authorized_with_capture 
 	end
 
-#########################################################################
-#########################################################################
-	
   def promotion_adjustment_total
     adjustments.promotion.eligible.sum(:amount).abs
   end
 
-
-  ##
   # Compute  taxcloud, but do not save 
   def tax_cloud_compute_tax
      SpreeTaxCloud::TaxComputer.new(self).compute
   end
-
-#########################################################################
-#########################################################################
-
 end

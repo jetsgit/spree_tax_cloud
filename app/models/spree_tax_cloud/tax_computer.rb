@@ -1,5 +1,5 @@
 class SpreeTaxCloud::TaxComputer
-  # DEFAULT_STATUS_FIELD = :tax_cloud_response_at
+
   DEFAULT_TAX_AMOUNT = 0.0
 
   class MissingTaxAmountError < StandardError; end
@@ -7,13 +7,11 @@ class SpreeTaxCloud::TaxComputer
   attr_reader :order, :doc_type, :status_field
 
   def initialize(order, options = {})
-
     @order = order
   end
 
   def compute
     return unless order.tax_cloud_eligible?
-
     reset_tax_attributes(order)
 
     transaction = Spree::TaxCloudTransaction.transaction_from_order(order) 
@@ -53,7 +51,6 @@ class SpreeTaxCloud::TaxComputer
     handle_spree_tax_cloud_error(e)
   end
 
-  ##
   # Clean out old taxes and update 
   def reset_tax_attributes(order)
     order.all_adjustments.tax.destroy_all
@@ -78,10 +75,6 @@ class SpreeTaxCloud::TaxComputer
     Spree::OrderUpdater.new(order).update
     order.save!
   end
-
-  # def invoice_for_order
-  #   SpreeTaxCloud::Invoice.new(order, doc_type, logger).invoice
-  # end
 
   def handle_tax_cloud_error(e)
     logger.error(e)
