@@ -22,13 +22,9 @@ module Spree
 			)
 
 			index = -1 
-
-			order.line_items.each do |line_item| 
-				line_item.update_column(:pre_tax_amount, line_item.discounted_amount)
-				transaction.cart_items << cart_item_from_item(line_item, index += 1)
-			end
-
+			order.line_items.each { |line_item| transaction.cart_items << cart_item_from_item(line_item, index += 1) }
 			transaction.cart_items << shipping_item_from_order(order, index += 1)
+
 			return transaction
 		end
 
@@ -48,7 +44,7 @@ module Spree
         index:      index,
         item_id:    line_item.try(:variant).try(:sku) || "LineItem " + line_item.id.to_s,
         tic:        line_item.product.tax_cloud_tic,
-        price:      line_item.price,
+        price:      ( line_item.quantity * line_item.price + line_item.promo_total) / line_item.quantity,
         quantity:   line_item.quantity
         )
 
