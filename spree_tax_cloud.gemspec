@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
 
   # Required to test Honeybadger alerting
   s.add_development_dependency 'honeybadger'
-  s.add_development_dependency 'capybara' #,           '~> 1.1'
+  s.add_development_dependency 'capybara' ,           '>= 2.4.1'
   s.add_development_dependency 'coffee-rails'
   s.add_development_dependency 'database_cleaner'
   s.add_development_dependency 'factory_girl_rails', '~> 4.2'

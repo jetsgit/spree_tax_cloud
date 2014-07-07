@@ -41,7 +41,7 @@ RSpec.configure do |config|
 
   config.before :each do
     # Before each spec check if it is a Javascript test and switch between using database transactions or not where necessary.
-    DatabaseCleaner.strategy = example.metadata[:js] ? :truncation : :transaction
+    DatabaseCleaner.strategy = RSpec.current_example.metadata[:js] ? :truncation : :transaction
     DatabaseCleaner.start
   end
 
@@ -55,4 +55,5 @@ RSpec.configure do |config|
   # automatically. This will be the default behavior in future versions of
   # rspec-rails.
   config.infer_base_class_for_anonymous_controllers = false
+  config.infer_spec_type_from_file_location!
 end
