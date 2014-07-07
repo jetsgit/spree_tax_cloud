@@ -19,12 +19,12 @@ Gem::Specification.new do |s|
   s.add_dependency 'spree_core', '~> 2.2.0'
   s.add_dependency 'spree_frontend'
 
-	s.add_runtime_dependency 'savon', '~> 2.5.1'
+	s.add_runtime_dependency 'savon', '2.5.1'
   s.add_runtime_dependency 'tax_cloud', '0.3.0'
 
   # Required to test Honeybadger alerting
   s.add_development_dependency 'honeybadger'
-  s.add_development_dependency 'capybara' #,           '~> 1.1'
+  s.add_development_dependency 'capybara' ,           '2.4.1'
   s.add_development_dependency 'coffee-rails'
   s.add_development_dependency 'database_cleaner'
   s.add_development_dependency 'factory_girl_rails', '~> 4.2'
