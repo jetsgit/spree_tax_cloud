@@ -1,33 +1,32 @@
 module Spree
-  class Admin::TaxCloudSettingsController < Admin::BaseController
-
-    respond_to  :html
-
-    def show
-    end
-
-    def update
-      origin = params[:address]
-      taxpref = params[:settings]
-      Spree::Config.taxcloud_origin = {   :Address1 =>  origin[:taxcloud_address1],
-                                          :Address2 => origin[:taxcloud_address2],
-                                          :City => origin[:taxcloud_city],
-                                          :State => origin[:taxcloud_state],
-                                          :Zip5 => origin[:taxcloud_zip5],
-                                          :Zip4 => origin[:taxcloud_zip4] }.to_json
-
-      Spree::Config.taxcloud_api_login_id = taxpref[:taxcloud_api_login_id]
-      Spree::Config.taxcloud_api_key = taxpref[:taxcloud_api_key]
-      Spree::Config.taxcloud_default_product_tic = taxpref[:taxcloud_default_product_tic]
-      Spree::Config.taxcloud_shipping_tic = taxpref[:taxcloud_shipping_tic]
-      Spree::Config.taxcloud_usps_user_id = taxpref[:taxcloud_usps_user_id]
-
-
-      respond_to do |format|
-        format.html {
-          redirect_to admin_tax_cloud_settings_path
-        }
+  module Admin
+    class TaxCloudSettingsController < Spree::Admin::BaseController
+      
+      def edit
+        @preferences_login = [:taxcloud_api_login_id, :taxcloud_api_key, :taxcloud_usps_user_id]
+        @preferences_tic = [:taxcloud_default_product_tic, :taxcloud_shipping_tic]
       end
+
+      def update
+        params.each do |name, value|
+          next unless Spree::Config.has_preference? name
+          Spree::Config[name] = value
+        end
+        flash[:success] = Spree.t(:successfully_updated, :resource => Spree.t(:tax_cloud_settings))
+
+        redirect_to edit_admin_tax_cloud_settings_path
+      end
+
+      def dismiss_alert
+        if request.xhr? and params[:alert_id]
+          dismissed = Spree::Config[:dismissed_spree_alerts] || ''
+          Spree::Config.set :dismissed_spree_alerts => dismissed.split(',').push(params[:alert_id]).join(',')
+          filter_dismissed_alerts
+          render :nothing => true
+        end
+      end
+      
     end
   end
 end
+

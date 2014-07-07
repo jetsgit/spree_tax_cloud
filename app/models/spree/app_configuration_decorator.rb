@@ -4,7 +4,6 @@ Spree::AppConfiguration.class_eval do
   preference :taxcloud_default_product_tic, :string, default: '00000'
   preference :taxcloud_shipping_tic, :string, default: '11010'
   preference :taxcloud_usps_user_id, :string
-  preference :taxcloud_origin, :string, :default => {}.to_json
 
   TaxCloud.configure do |config|
     config.api_login_id = Spree::Config.taxcloud_api_login_id
