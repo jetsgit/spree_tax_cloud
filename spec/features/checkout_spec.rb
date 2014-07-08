@@ -7,7 +7,7 @@ describe 'Checkout', js: true do
   let!(:shipping_method) { create(:shipping_method) }
   let!(:stock_location) { create(:stock_location, country_id: country.id, state_id: state.id) }
   let!(:mug) { create(:product, :name => "RoR Mug") }
-  let!(:payment_method) { create(:payment_method) }
+  let!(:payment_method) { create(:check_payment_method) }
   let!(:zone) { create(:zone) }
 
   before do
@@ -22,6 +22,7 @@ describe 'Checkout', js: true do
     Spree::StockLocation.first.update_attributes(address1: '2301 Coliseum Pkwy', city: 'Montgomery', zipcode: '36110')
 
     create(:zone)
+    tax_rate = Spree::TaxRate.create(amount: 0, name: "Sales Tax", zone: Spree::Zone.first, calculator: Spree::Calculator::CloudTax.create, tax_category: Spree::TaxCategory.first)
   end
 
   before do
@@ -35,54 +36,66 @@ describe 'Checkout', js: true do
     fill_in "order_email", :with => "test@example.com"
     click_button "Continue"
 
-    address = "order_bill_address_attributes"
-    fill_in "#{address}_firstname", :with => "John"
-    fill_in "#{address}_lastname", :with => "Doe"
-    fill_in "#{address}_address1", :with => "143 Swan Street"
-    fill_in "#{address}_city", :with => "Montgomery"
-    select "United States of America", :from => "#{address}_country_id"
-    select "Alabama", :from => "#{address}_state_id"
-    fill_in "#{address}_zipcode", :with => "12345"
-    fill_in "#{address}_phone", :with => "(555) 5555-555"
+    fill_in_address(default_address)
+    fill_in "order_bill_address_attributes_zipcode", with: '12345'
+
     click_button "Save and Continue"
     click_button "Save and Continue"
-    page.should have_content("The Ship To zip code (12345) is not valid for this state (AL)")
+
+    click_button "Save and Continue"
+    page.should have_content("Address Verification Failed")
   end
 
-  it "should calculate and display tax on payment step" do
-    fill_in "order_email", :with => "test@example.com"
+  it "should calculate and display tax on payment step and allow full checkout" do
+    fill_in "order_email", with: "test@example.com"
     click_button "Continue"
-    fill_in_address
+    fill_in_address(default_address)
     click_button "Save and Continue"
     click_button "Save and Continue"
     # TODO update seeds to make an order with actual tax
-    page.should have_content("Tax: $0.00")
+    # page.should have_content("Tax: $0.00")
+
+    click_on "Save and Continue"
+    expect(current_path).to match(spree.order_path(Spree::Order.last))
   end
 
   it 'should not break when removing all items from cart after a tax calculation has been created' do
     fill_in "order_email", :with => "test@example.com"
     click_button "Continue"
-    fill_in_address
+    fill_in_address(default_address)
     click_button "Save and Continue"
     click_button "Save and Continue"
     # TODO update seeds to make an order with actual tax
-    page.should have_content("Tax: $0.00")
+    page.should have_content("Order Total: $19.99")
     visit spree.cart_path
     find('a.delete').click
     page.should have_content('Shopping Cart')
     page.should_not have_content('Internal Server Error')
   end
 
-  def fill_in_address
-    address = "order_bill_address_attributes"
-    fill_in "#{address}_firstname", :with => "John"
-    fill_in "#{address}_lastname", :with => "Doe"
-    fill_in "#{address}_address1", :with => "143 Swan Street"
-    fill_in "#{address}_city", :with => "Montgomery"
-    select "United States of America", :from => "#{address}_country_id"
-    select "Alabama", :from => "#{address}_state_id"
-    fill_in "#{address}_zipcode", :with => "36110"
-    fill_in "#{address}_phone", :with => "(555) 5555-555"
+  def default_address
+    address = Spree::Address.new()
+    address.firstname = "John"
+    address.lastname = "Doe"
+    address.address1 = "143 Swan Street"
+    address.city = "Montgomery"
+    address.country = Spree::Country.where(name: "United States of America").first
+    address.state = Spree::State.where(name: "Alabama").first
+    address.zipcode = "36110"
+    address.phone = "(555) 5555-555"
+    address
   end
-
+  
+  def fill_in_address(address)
+    fieldname = "order_bill_address_attributes"
+    fill_in "#{fieldname}_firstname", with: address.first_name
+    fill_in "#{fieldname}_lastname", with: address.last_name
+    fill_in "#{fieldname}_address1", with: address.address1
+    fill_in "#{fieldname}_city", with: address.city
+    select address.country.name, from: "#{fieldname}_country_id"
+    select address.state.name, from: "#{fieldname}_state_id"
+    fill_in "#{fieldname}_zipcode", with: address.zipcode
+    fill_in "#{fieldname}_phone", with: address.phone
+  end
+  
 end

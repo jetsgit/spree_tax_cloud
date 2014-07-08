@@ -33,15 +33,15 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = false
 
   config.before :suite do
-    Spree::Config[:taxcloud_api_login_id] = '395D0F00'
-    Spree::Config[:taxcloud_api_key]      = 'E191A9C3-75AD-49A5-917E-171E0C9CD396'
+    Spree::Config[:taxcloud_api_login_id] = '9A358A0'
+    Spree::Config[:taxcloud_api_key]      = 'AA654725-10B3-4F01-A02F-E8047ADCC9CB'
     Spree::Config[:taxcloud_default_product_tic]  = '00000'
     Spree::Config[:taxcloud_shipping_tic] = '11010'
   end
 
   config.before :each do
     # Before each spec check if it is a Javascript test and switch between using database transactions or not where necessary.
-    DatabaseCleaner.strategy = example.metadata[:js] ? :truncation : :transaction
+    DatabaseCleaner.strategy = RSpec.current_example.metadata[:js] ? :truncation : :transaction
     DatabaseCleaner.start
   end
 
@@ -55,4 +55,5 @@ RSpec.configure do |config|
   # automatically. This will be the default behavior in future versions of
   # rspec-rails.
   config.infer_base_class_for_anonymous_controllers = false
+  config.infer_spec_type_from_file_location!
 end
