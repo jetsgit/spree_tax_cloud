@@ -22,7 +22,7 @@ describe 'Checkout', js: true do
     Spree::StockLocation.first.update_attributes(address1: '2301 Coliseum Pkwy', city: 'Montgomery', zipcode: '36110')
 
     create(:zone)
-    tax_rate = Spree::TaxRate.create(amount: 0, name: "Sales Tax", zone: Spree::Zone.first, calculator: Spree::Calculator::TaxCloudCalculator.create, tax_category: Spree::TaxCategory.first)
+    tax_rate = Spree::TaxRate.create(amount: 0, name: "Sales Tax", zone: Spree::Zone.first, calculator: Spree::Calculator::CloudTax.create, tax_category: Spree::TaxCategory.first)
   end
 
   before do
