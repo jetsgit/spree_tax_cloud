@@ -42,10 +42,26 @@ class SpreeTaxCloud::TaxComputer
         Spree::ItemAdjustments.new(line_item).update
         line_item.save!
       end
+
+      unless order.shipments.first.blank?
+        tax_amount = round_to_two_places( response_cart_items.last.tax_amount ) 
+        shipment = order.shipments.first
+        shipment.adjustments.tax.create!({
+          :adjustable => shipment,
+          :adjustable_id => order.shipments.first.id,
+          :amount => tax_amount,
+          :order => @order,
+          :label => "Shipping Tax",
+          :included => false,
+          :source => Spree::TaxRate.tax_cloud_single_rate,
+          :state => 'closed'
+        })
+        Spree::ItemAdjustments.new(shipment).update
+        shipment.save!
+      end
     else
       raise ::SpreeTaxCloud::Error, 'TaxCloud response unsuccessful!'
     end
-     
 
     Spree::OrderUpdater.new(order).update
     order[status_field] = Time.now
