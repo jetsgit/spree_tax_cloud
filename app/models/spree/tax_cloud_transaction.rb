@@ -13,7 +13,6 @@ module Spree
 				raise 'Please ensure you have at least one Stock Location with a valid address for your tax origin.'
 			end
 
-			
 			transaction = ::TaxCloud::Transaction.new(
 				customer_id: order.user_id || order.email,
 				order_id: order.number,
@@ -55,6 +54,9 @@ module Spree
         index:      index,
         item_id:    "Shipment " + shipment.number,
         tic:        Spree::Config.taxcloud_shipping_tic,
+        price:      shipment.cost,
+        quantity:   1
+        )
 
       else
         raise 'TaxCloud::CartItem cannot be made from this item.'
