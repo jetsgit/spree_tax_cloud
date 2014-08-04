@@ -16,4 +16,5 @@ en:
     spree:
         cloudtax_description: No Op TaxCloud Calculator
         cloudtax_label: Cloud Tax  
+        rma_tax_credit: RMA Tax Credit
 
