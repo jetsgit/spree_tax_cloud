@@ -29,7 +29,6 @@ module Spree
 		end
 
 		def self.transaction_for_return(order)
-			binding.pry
 			stock_location = Spree::StockLocation.active.where("city IS NOT NULL and state_id IS NOT NULL").first
 
 			unless stock_location
