@@ -12,24 +12,24 @@ describe Spree::TaxCloudTransaction do
   before :each do
     state = create(:state)
     @location = create(:stock_location, address1: '2301 Coliseum Pkwy', city: 'Montgomery', state_id: state.id, zipcode: '36110')
-    @params = subject.lookup_params(tax_cloud_transaction)
+    @transaction = tax_cloud_transaction
   end
 
   it 'stock location address is used for origin' do
-    @params['origin']['Address1'].should eq @location.address1
-    @params['origin']['Address2'].should eq @location.address2
-    @params['origin']['City'].should eq @location.city
-    @params['origin']['Zip5'].should eq @location.zipcode
+    @transaction.origin.address1.should eq @location.address1
+    @transaction.origin.address2.should eq @location.address2
+    @transaction.origin.city.should eq @location.city
+    @transaction.origin.zip5.should eq @location.zipcode
   end
 
   it 'uses order ship address for destination' do
-    @params['destination']['Address1'].should eq order.ship_address.address1
-    @params['destination']['Address2'].should eq order.ship_address.address2
-    @params['destination']['City'].should eq order.ship_address.city
-    @params['destination']['Zip5'].should eq order.ship_address.zipcode
+    @transaction.destination.address1.should eq order.ship_address.address1
+    @transaction.destination.address2.should eq order.ship_address.address2
+    @transaction.destination.city.should eq order.ship_address.city
+    @transaction.destination.zip5.should eq order.ship_address.zipcode
   end
 
   it 'order number is used for cartID' do
-    @params['CartID'].should eq order.number
+    @transaction.cart_id.should eq order.number
   end
 end
