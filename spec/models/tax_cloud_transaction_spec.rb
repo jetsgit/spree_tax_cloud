@@ -4,9 +4,9 @@ describe Spree::TaxCloudTransaction do
 
   let(:order) { build(:order, :ship_address => build(:address)) }
   let(:tax_cloud_transaction) {
-    tax_cloud_transaction = Spree::TaxCloudTransaction.new
-    tax_cloud_transaction.order = order
-    tax_cloud_transaction.cart_items = []
+    tax_cloud_transaction = ::TaxCloud::Transaction.new
+    # tax_cloud_transaction.order = order
+    # tax_cloud_transaction.cart_items = []
     tax_cloud_transaction
   }
 
