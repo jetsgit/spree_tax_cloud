@@ -22,7 +22,7 @@ describe 'Checkout', js: true do
     Spree::StockLocation.first.update_attributes(address1: '2301 Coliseum Pkwy', city: 'Montgomery', zipcode: '36110')
 
     create(:zone)
-    tax_rate = Spree::TaxRate.create(amount: 0, name: "Sales Tax", zone: Spree::Zone.first, calculator: Spree::Calculator::CloudTax.create, tax_category: Spree::TaxCategory.first)
+    # tax_rate = Spree::TaxRate.create(amount: 0, name: "Sales Tax", zone: Spree::Zone.first, calculator: Spree::Calculator::CloudTax.create, tax_category: Spree::TaxCategory.first)
   end
 
   before do
@@ -32,7 +32,7 @@ describe 'Checkout', js: true do
     click_button "Checkout"
   end
 
-  it "should display tax lookup error if invalid address" do
+  it "should display tax lookup error if invalid zip code" do
     fill_in "order_email", :with => "test@example.com"
     click_button "Continue"
 
@@ -53,10 +53,10 @@ describe 'Checkout', js: true do
     click_button "Save and Continue"
     click_button "Save and Continue"
     # TODO update seeds to make an order with actual tax
-    # page.should have_content("Tax: $0.00")
+    page.should have_content("Tax: $1.74")
 
-    click_on "Save and Continue"
-    expect(current_path).to match(spree.order_path(Spree::Order.last))
+    # click_on "Save and Continue"
+    # expect(current_path).to match(spree.order_path(Spree::Order.last))
   end
 
   it 'should not break when removing all items from cart after a tax calculation has been created' do
@@ -81,7 +81,7 @@ describe 'Checkout', js: true do
     address.city = "Montgomery"
     address.country = Spree::Country.where(name: "United States of America").first
     address.state = Spree::State.where(name: "Alabama").first
-    address.zipcode = "36110"
+    address.zipcode = "98260"
     address.phone = "(555) 5555-555"
     address
   end

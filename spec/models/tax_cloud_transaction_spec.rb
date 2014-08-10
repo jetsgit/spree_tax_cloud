@@ -5,7 +5,6 @@ describe Spree::TaxCloudTransaction do
   let(:order) { build(:order, :ship_address => build(:address)) }
   let(:tax_cloud_transaction) {
     tax_cloud_transaction = Spree::TaxCloudTransaction.transaction_from_order(order)
-    # tax_cloud_transaction.order = order
     tax_cloud_transaction
   }
 
