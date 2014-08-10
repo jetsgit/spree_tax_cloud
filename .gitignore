@@ -21,3 +21,6 @@ spec/dummy
 tags
 *.orig
 .sass-cache
+
+# Ignore application configuration
+/config/application.yml
