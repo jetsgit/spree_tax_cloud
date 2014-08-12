@@ -1,4 +1,8 @@
 source 'https://rubygems.org'
 
-gem 'figaro', github: 'laserlemon/figaro'
+group :development, :test do
+    gem 'figaro', github: 'laserlemon/figaro'
+end
+
 gemspec
+
