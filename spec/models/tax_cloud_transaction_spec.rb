@@ -14,7 +14,7 @@ describe Spree::TaxCloudTransaction do
     @transaction = tax_cloud_transaction
   end
 
-  it 'stock location address is used for origin' do
+  it 'has a stock location address which is used for origin' do
     @transaction.origin.address1.should eq @location.address1
     @transaction.origin.address2.should eq @location.address2
     @transaction.origin.city.should eq @location.city
@@ -28,7 +28,7 @@ describe Spree::TaxCloudTransaction do
     @transaction.destination.zip5.should eq order.ship_address.zipcode
   end
 
-  it 'order number is used for cartID' do
+  it 'has an order number which is used for cartID' do
     @transaction.cart_id.should eq order.number
   end
 end
