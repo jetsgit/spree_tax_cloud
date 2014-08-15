@@ -6,8 +6,8 @@ Spree::AppConfiguration.class_eval do
   preference :taxcloud_usps_user_id, :string
 
   TaxCloud.configure do |config|
-    config.api_login_id = Spree::Config.taxcloud_api_login_id
-    config.api_key = Spree::Config.taxcloud_api_key
-    config.usps_username = Spree::Config.taxcloud_usps_user_id
+    config.api_login_id = Spree::Config.taxcloud_api_login_id || ENV["taxcloud_api_login_id"]
+    config.api_key = Spree::Config.taxcloud_api_key || ENV["taxcloud_api_key"]
+    config.usps_username = Spree::Config.taxcloud_usps_user_id || ENV["taxcloud_usps_user_id"]
   end
 end

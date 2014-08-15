@@ -3,26 +3,34 @@ require 'spec_helper'
 describe 'Checkout', js: true do
 
   let!(:country) { create(:country, :name => "United States of America",:states_required => true) }
-  let!(:state) { create(:state, :name => "Alabama", :country => country) }
-  let!(:shipping_method) { create(:shipping_method) }
-  let!(:stock_location) { create(:stock_location, country_id: country.id, state_id: state.id) }
+  let!(:state) { create(:state, :name => "Washington", abbr: "WA", :country => country) }
+  
+  let!(:stock_location) { create(:stock_location, address1: "322 Main St", city: "Langley", state_id: state.id, zipcode: "98117", country_id: country.id) }
+
   let!(:mug) { create(:product, :name => "RoR Mug") }
   let!(:payment_method) { create(:check_payment_method) }
-  let!(:zone) { create(:zone) }
+
+  let!(:zone) do
+      zone = create(:zone, name: "US")
+      zone.members.create(zoneable: country)
+      return zone
+  end
+
+  # let!(:shipping_calculator) { create(:calculator) } 
+  let!(:shipping_method) { create(:shipping_method, tax_category_id: 1, zones: [zone]) } 
+
+  let!(:tax_rate) { create(:tax_rate, amount: 0, name: "Sales Tax", zone: zone, calculator: Spree::Calculator::CloudTax.create, tax_category: Spree::TaxCategory.first, show_rate_in_label: false) } 
+
+  # let!(:mug) { create(:product, name: "RoR Mug", price: 10) }
 
   before do
     Spree::Product.delete_all
-    @product = create(:product, :name => "RoR Mug")
-    # Not sure if we should fix spree core to not require a shipping category on products...
+    @product = create(:product, name:  "RoR Mug", price: 10.00, sku: "1#mug" )
     @product.shipping_category = shipping_method.shipping_categories.first
     @product.save!
-
     stock_location.stock_items.update_all(count_on_hand: 1)
     # Ensure it's configured for tax:
-    Spree::StockLocation.first.update_attributes(address1: '2301 Coliseum Pkwy', city: 'Montgomery', zipcode: '36110')
-
-    create(:zone)
-    # tax_rate = Spree::TaxRate.create(amount: 0, name: "Sales Tax", zone: Spree::Zone.first, calculator: Spree::Calculator::CloudTax.create, tax_category: Spree::TaxCategory.first)
+    Spree::StockLocation.first.update_attributes(address1: '322 Main St.', city: 'Langley', state_id: state.id, zipcode: '98260')
   end
 
   before do
@@ -32,31 +40,31 @@ describe 'Checkout', js: true do
     click_button "Checkout"
   end
 
+  it "should display tax lookup if valid zip code" do
+    fill_in "order_email", :with => "test@example.com"
+    fill_in_address(default_address)
+    click_button "Save and Continue"
+    page.should_not have_content("Address Verification Failed")
+  end
+
   it "should display tax lookup error if invalid zip code" do
     fill_in "order_email", :with => "test@example.com"
-    click_button "Continue"
-
     fill_in_address(default_address)
-    fill_in "order_bill_address_attributes_zipcode", with: '12345'
-
-    click_button "Save and Continue"
-    click_button "Save and Continue"
-
+    fill_in "order_bill_address_attributes_zipcode", with: '12345' 
     click_button "Save and Continue"
     page.should have_content("Address Verification Failed")
   end
+  
 
   it "should calculate and display tax on payment step and allow full checkout" do
     fill_in "order_email", with: "test@example.com"
-    click_button "Continue"
     fill_in_address(default_address)
+    find(:css, "#order_use_billing[value='1']").set(true)
     click_button "Save and Continue"
-    click_button "Save and Continue"
-    # TODO update seeds to make an order with actual tax
-    page.should have_content("Tax: $1.74")
-
-    # click_on "Save and Continue"
-    # expect(current_path).to match(spree.order_path(Spree::Order.last))
+    binding.pry
+    click_on "Save and Continue"
+    click_on "Save and Continue"
+    expect(current_path).to match(spree.order_path(Spree::Order.last))
   end
 
   it 'should not break when removing all items from cart after a tax calculation has been created' do
@@ -77,12 +85,22 @@ describe 'Checkout', js: true do
     address = Spree::Address.new()
     address.firstname = "John"
     address.lastname = "Doe"
-    address.address1 = "143 Swan Street"
-    address.city = "Montgomery"
+    address.address1 = "329 N.W. 79th St."
+    address.city = "Seattle"
     address.country = Spree::Country.where(name: "United States of America").first
-    address.state = Spree::State.where(name: "Alabama").first
-    address.zipcode = "98260"
-    address.phone = "(555) 5555-555"
+    address.state = Spree::State.where(name: "Washington").first
+    address.zipcode = "98117"
+    address.phone = "(360) 789-1122"
+    address
+  end
+
+  def stock_location_address
+    address = Spree::Address.new()
+    address.address1 = "329 N.W. 79th St."
+    address.city = "Seattle"
+    address.country = Spree::Country.where(name: "United States of America").first
+    address.state = Spree::State.where(name: "Washington").first
+    address.zipcode = "98117"
     address
   end
   

@@ -21,6 +21,12 @@ require 'spree/testing_support/preferences'
 require 'spree/testing_support/flash'
 require 'spree/testing_support/url_helpers'
 
+# Capybara.register_driver :chrome do |app|
+#   Capybara::Selenium::Driver.new(app, :browser => :chrome)
+# end
+
+Capybara.javascript_driver = :chrome
+
 RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
   config.include Spree::TestingSupport::ControllerRequests
@@ -30,17 +36,21 @@ RSpec.configure do |config|
 
   # Capybara javascript drivers require transactional fixtures set to false, and we just use DatabaseCleaner to cleanup after each test instead.
   # Without transactional fixtures set to false none of the records created to setup a test will be available to the browser, which runs under a seperate server instance.
+
   config.use_transactional_fixtures = false
 
   config.before :suite do
-    Spree::Config[:taxcloud_api_login_id] = '9A358A0'
-    Spree::Config[:taxcloud_api_key]      = 'AA654725-10B3-4F01-A02F-E8047ADCC9CB'
+    Spree::Config[:taxcloud_api_login_id] = ENV["taxcloud_api_login_id"]
+    Spree::Config[:taxcloud_api_key]      = ENV["taxcloud_api_key"]
+    Spree::Config[:taxcloud_usps_user_id] = ENV["taxcloud_usps_user_id"]
     Spree::Config[:taxcloud_default_product_tic]  = '00000'
     Spree::Config[:taxcloud_shipping_tic] = '11010'
   end
 
   config.before :each do
+
     # Before each spec check if it is a Javascript test and switch between using database transactions or not where necessary.
+
     DatabaseCleaner.strategy = RSpec.current_example.metadata[:js] ? :truncation : :transaction
     DatabaseCleaner.start
   end

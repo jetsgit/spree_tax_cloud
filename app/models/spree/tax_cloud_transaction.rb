@@ -20,11 +20,9 @@ module Spree
 				origin: address_from_spree_address(stock_location),
 				destination: address_from_spree_address(order.ship_address)
 			)
-
 			index = -1 
 			order.line_items.each { |line_item| transaction.cart_items << cart_item_from_item(line_item, index += 1) }
 			transaction.cart_items << shipping_item_from_order(order, index += 1)
-
 			return transaction
 		end
 
