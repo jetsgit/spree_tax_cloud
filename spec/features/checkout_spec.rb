@@ -29,7 +29,6 @@ describe 'Checkout', js: true do
     @product.shipping_category = shipping_method.shipping_categories.first
     @product.save!
     stock_location.stock_items.update_all(count_on_hand: 1)
-    # Ensure it's configured for tax:
     Spree::StockLocation.first.update_attributes(address1: '322 Main St.', city: 'Langley', state_id: state.id, zipcode: '98260')
   end
 
@@ -61,7 +60,6 @@ describe 'Checkout', js: true do
     fill_in_address(default_address)
     find(:css, "#order_use_billing[value='1']").set(true)
     click_button "Save and Continue"
-    binding.pry
     click_on "Save and Continue"
     click_on "Save and Continue"
     expect(current_path).to match(spree.order_path(Spree::Order.last))
@@ -69,12 +67,10 @@ describe 'Checkout', js: true do
 
   it 'should not break when removing all items from cart after a tax calculation has been created' do
     fill_in "order_email", :with => "test@example.com"
-    click_button "Continue"
     fill_in_address(default_address)
     click_button "Save and Continue"
     click_button "Save and Continue"
-    # TODO update seeds to make an order with actual tax
-    page.should have_content("Order Total: $19.99")
+    page.should have_content("Order Total: $21.90")
     visit spree.cart_path
     find('a.delete').click
     page.should have_content('Shopping Cart')

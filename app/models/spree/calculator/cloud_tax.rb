@@ -16,8 +16,8 @@ module Spree
       Spree.t(:cloudtax_label)
     end
 
-    # def compute_shipping_rate(dummy)
-    # end
+    def compute_shipping_rate(dummy)
+    end
 
     def compute(computable)
       raise UnusedCompute.new("The tax cloud calculator should never use #compute")
