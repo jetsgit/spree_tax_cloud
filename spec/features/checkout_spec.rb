@@ -16,12 +16,10 @@ describe 'Checkout', js: true do
       return zone
   end
 
-  # let!(:shipping_calculator) { create(:calculator) } 
   let!(:shipping_method) { create(:shipping_method, tax_category_id: 1, zones: [zone]) } 
 
   let!(:tax_rate) { create(:tax_rate, amount: 0, name: "Sales Tax", zone: zone, calculator: Spree::Calculator::CloudTax.create, tax_category: Spree::TaxCategory.first, show_rate_in_label: false) } 
 
-  # let!(:mug) { create(:product, name: "RoR Mug", price: 10) }
 
   before do
     Spree::Product.delete_all
@@ -33,48 +31,58 @@ describe 'Checkout', js: true do
   end
 
   before do
-    visit spree.products_path
-    click_link "RoR Mug"
-    click_button "add-to-cart-button"
-    click_button "Checkout"
+    VCR.use_cassette 'navigate/select_and_checkout' do
+      visit "/products"
+      click_link "RoR Mug"
+      click_button "add-to-cart-button"
+      click_button "Checkout"
+    end
   end
 
   it "should display tax lookup if valid zip code" do
-    fill_in "order_email", :with => "test@example.com"
-    fill_in_address(default_address)
-    click_button "Save and Continue"
-    page.should_not have_content("Address Verification Failed")
+    VCR.use_cassette 'model/tax_cloud_lookup' do
+      fill_in "order_email", :with => "test@example.com"
+      fill_in_address(default_address)
+      click_button "Save and Continue"
+      page.should_not have_content("Address Verification Failed")
+    end
   end
 
   it "should display tax lookup error if invalid zip code" do
-    fill_in "order_email", :with => "test@example.com"
-    fill_in_address(default_address)
-    fill_in "order_bill_address_attributes_zipcode", with: '12345' 
-    click_button "Save and Continue"
-    page.should have_content("Address Verification Failed")
+    VCR.use_cassette 'model/tax_cloud_invalid_zipcode' do
+      fill_in "order_email", :with => "test@example.com"
+      fill_in_address(default_address)
+      fill_in "order_bill_address_attributes_zipcode", with: '12345' 
+      click_button "Save and Continue"
+      page.should have_content("Address Verification Failed")
+    end
   end
   
 
   it "should calculate and display tax on payment step and allow full checkout" do
-    fill_in "order_email", with: "test@example.com"
-    fill_in_address(default_address)
-    find(:css, "#order_use_billing[value='1']").set(true)
-    click_button "Save and Continue"
-    click_on "Save and Continue"
-    click_on "Save and Continue"
-    expect(current_path).to match(spree.order_path(Spree::Order.last))
+    VCR.use_cassette 'model/tax_cloud_complete_checkout' do
+      fill_in "order_email", with: "test@example.com"
+      fill_in_address(default_address)
+      find(:css, "#order_use_billing[value='1']").set(true)
+      click_button "Save and Continue"
+      click_on "Save and Continue"
+      click_on "Save and Continue"
+      expect(current_path).to match(spree.order_path(Spree::Order.last))
+    end
   end
 
   it 'should not break when removing all items from cart after a tax calculation has been created' do
-    fill_in "order_email", :with => "test@example.com"
-    fill_in_address(default_address)
-    click_button "Save and Continue"
-    click_button "Save and Continue"
-    page.should have_content("Order Total: $21.90")
-    visit spree.cart_path
-    find('a.delete').click
-    page.should have_content('Shopping Cart')
-    page.should_not have_content('Internal Server Error')
+    VCR.use_cassette 'model/tax_cloud_delete_cart_items' do
+      fill_in "order_email", :with => "test@example.com"
+      fill_in_address(default_address)
+      click_button "Save and Continue"
+      click_button "Save and Continue"
+      page.should have_content("Order Total: $21.90")
+      visit spree.cart_path
+      find('a.delete').click
+      page.should have_content('Shopping Cart')
+      page.should_not have_content('Internal Server Error')
+    end
   end
 
   def default_address

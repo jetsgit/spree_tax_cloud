@@ -7,12 +7,16 @@ module Spree
 
 		validates :order, :presence => true
 
+		# Create a transaction using TaxCloud::Transaction,
+		# and populate it with line_items of the order, addint to the cart.
+		# Append shipping charge to the cart.
 		def self.transaction_from_order(order)
 			stock_location = Spree::StockLocation.active.where("city IS NOT NULL and state_id IS NOT NULL").first
 			unless stock_location
 				raise 'Please ensure you have at least one Stock Location with a valid address for your tax origin.'
 			end
 
+			
 			transaction = ::TaxCloud::Transaction.new(
 				customer_id: order.user_id || order.email,
 				order_id: order.number,
