@@ -21,7 +21,7 @@ Spree::Order.class_eval do
 	end
 
 	def capture_and_authorize_tax_cloud
-		transaction = Spree::TaxCloudTransaction.transaction_with_taxcloud(self, NewOrder)
+		transaction = Spree::TaxCloudTransaction.transaction_with_taxcloud(self, true)
 		transaction.authorized_with_capture 
 	end
 

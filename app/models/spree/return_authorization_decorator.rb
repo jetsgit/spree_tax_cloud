@@ -1,7 +1,7 @@
 module Spree 
   ReturnAuthorization.class_eval do
     def process_return_with_taxcloud_return
-      transaction = Spree::TaxCloudTransaction.transaction_with_taxcloud(order, RMA)
+      transaction = Spree::TaxCloudTransaction.transaction_with_taxcloud(order, false)
       iu_groups = inventory_units.group_by(&:variant_id)
       index = -1
       iu_groups.each do |key,value|

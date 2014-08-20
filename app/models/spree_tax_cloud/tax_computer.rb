@@ -17,7 +17,7 @@ class SpreeTaxCloud::TaxComputer
     return unless order.tax_cloud_eligible?
     reset_tax_attributes(order)
 
-    transaction = Spree::TaxCloudTransaction.transaction_with_taxcloud(order, NewOrder) 
+    transaction = Spree::TaxCloudTransaction.transaction_with_taxcloud(order, false) 
     response = transaction.lookup 
     logger.debug(response)
     unless response.blank?
