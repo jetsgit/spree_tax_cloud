@@ -54,7 +54,7 @@ module Spree
      index:      index,
      item_id:    line_item.try(:variant).try(:sku) || "LineItem " + line_item.id.to_s,
      tic:        line_item.product.tax_cloud_tic,
-     price:      ( line_item.quantity * line_item.price + line_item.promo_total) / line_item.quantity,
+     price:      line_item.pre_tax_amount / line_item.quantity,
      quantity:   line_item.quantity
     )
 
@@ -79,7 +79,7 @@ module Spree
      index:      index,
      item_id:    line_item.try(:variant).try(:sku) || "LineItem " + line_item.id.to_s,
      tic:        line_item.product.tax_cloud_tic,
-     price:      ( line_item.quantity * line_item.price + line_item.promo_total) / line_item.quantity,
+     price:      line_item.pre_tax_amount / line_item.quantity,
      quantity:   quantity
     )
    else
