@@ -1,5 +1,6 @@
 module Spree 
   ReturnAuthorization.class_eval do
+    RMA = false
     def process_return_with_taxcloud_return
       transaction = Spree::TaxCloudTransaction.transaction_with_taxcloud(order, RMA)
       iu_groups = inventory_units.group_by(&:variant_id)
