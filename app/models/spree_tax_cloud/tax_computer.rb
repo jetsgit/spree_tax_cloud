@@ -19,10 +19,8 @@ class SpreeTaxCloud::TaxComputer
     reset_tax_attributes(order)
 
     transaction = Spree::TaxCloudTransaction.transaction_with_taxcloud(order, NewOrder) 
-    binding.pry
     response = transaction.lookup 
     logger.debug(response)
-    binding.pry
     unless response.blank?
       response_cart_items = response.cart_items
       index = -1
