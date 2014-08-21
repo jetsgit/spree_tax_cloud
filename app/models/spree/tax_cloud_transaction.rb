@@ -7,8 +7,6 @@ module Spree
 
   validates :order, :presence => true
 
-  NewOrder = true
-  RMA = false
 
   # Create a transaction using TaxCloud::Transaction,
   # and populate it with line_items of the order, adding to the cart.

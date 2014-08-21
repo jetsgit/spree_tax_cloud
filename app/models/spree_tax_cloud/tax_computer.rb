@@ -2,6 +2,7 @@ class SpreeTaxCloud::TaxComputer
 
   DEFAULT_TAX_AMOUNT = 0.0
   DEFAULT_STATUS_FIELD = :tax_cloud_response_at
+  NewOrder = true
 
 
   class MissingTaxAmountError < StandardError; end
@@ -17,9 +18,11 @@ class SpreeTaxCloud::TaxComputer
     return unless order.tax_cloud_eligible?
     reset_tax_attributes(order)
 
-    transaction = Spree::TaxCloudTransaction.transaction_with_taxcloud(order, false) 
+    transaction = Spree::TaxCloudTransaction.transaction_with_taxcloud(order, NewOrder) 
+    binding.pry
     response = transaction.lookup 
     logger.debug(response)
+    binding.pry
     unless response.blank?
       response_cart_items = response.cart_items
       index = -1
