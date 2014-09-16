@@ -35,7 +35,7 @@ class SpreeTaxCloud::TaxComputer
           :adjustable => line_item,
           :amount => tax_amount,
           :order => @order,
-          :label => Spree.t(:cloudtax_label),
+          :label => Spree.t(:tax_label),
           :included => false, # true for VAT
           :source => Spree::TaxRate.tax_cloud_single_rate,
           :state => 'closed', # this tells spree not to automatically recalculate tax_cloud tax adjustments
