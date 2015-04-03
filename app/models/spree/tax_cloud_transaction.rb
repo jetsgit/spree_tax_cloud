@@ -34,7 +34,7 @@ module Spree
       address2:   address.address2,
       city:       address.city,
       state:      address.try(:state).try(:abbr), # replace with state_text if possible
-      zip5:       address.zipcode[0...5]
+      zip5:       address.zipcode.try(:strip).try(:[], 0...5)
       )
     end
     def self.cart_item_from_item(item, index)
